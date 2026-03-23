@@ -25,7 +25,8 @@ const Feed = () => {
     };
 
     getNews();
-  }, [interests, navigate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [interests.join(','), navigate]);
 
   const handleLogout = () => {
     logout();

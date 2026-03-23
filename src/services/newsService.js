@@ -16,21 +16,22 @@ const CATEGORY_FEEDS = {
 
 export const OPENROUTER_API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY;
 
-// Batch AI Context Generator using OpenRouter Free Models
-const generateBatchAiContexts = async (titles, category) => {
+export const generateSingleInsight = async (article) => {
   try {
-    const prompt = `You are a news context generator. The user is interested in ${category}. 
-For each of the following ${titles.length} news titles, generate a short 1-2 sentence compelling insight explaining why they should care about this news.
-Assign a relevant persona from: 'student', 'investor', 'founder'.
-Return ONLY a valid JSON array of objects, each containing exactly two string keys: "persona" and "insight". The array must have exactly ${titles.length} items in the same order as the titles provided. DO NOT include any markdown formatting, only the array itself.
+    const prompt = `You are a news context generator. 
+The user is looking at this article:
+Title: ${article.title}
+Category: ${article.category || 'News'}
+Description: ${article.description || 'N/A'}
 
-Titles:
-${titles.map((t, i) => `${i + 1}. ${t}`).join('\n')}`;
+Generate a short 1-2 sentence compelling insight explaining why they should care about this news.
+Assign a relevant persona from: 'student', 'investor', 'founder'.
+Return ONLY a valid JSON object with exactly two string keys: "persona" and "insight". DO NOT include any markdown formatting or code blocks, only the JSON object itself!`;
 
     const response = await axios.post(
       'https://openrouter.ai/api/v1/chat/completions',
       {
-        model: 'openrouter/free', // Using the automatic free tier models on OpenRouter
+        model: 'openrouter/free',
         messages: [{ role: 'user', content: prompt }]
       },
       {
@@ -42,40 +43,28 @@ ${titles.map((t, i) => `${i + 1}. ${t}`).join('\n')}`;
     );
     
     const responseText = response.data.choices[0].message.content;
-    
-    // Safely parse out any markdown blocks if the AI includes them
-    const jsonMatch = responseText.match(/\[[\s\S]*\]/);
+    const jsonMatch = responseText.match(/\{[\s\S]*\}/);
     const validJsonText = jsonMatch ? jsonMatch[0] : responseText;
     const parsed = JSON.parse(validJsonText);
     
-    // Ensure we return exactly the right number of items
-    return titles.map((_, i) => {
-      if (parsed[i] && parsed[i].persona && parsed[i].insight) {
-        return parsed[i];
-      }
-      return {
-        persona: 'student',
-        insight: 'Interesting development in this sector. Worth monitoring for future trends.'
-      };
-    });
+    if (parsed.persona && parsed.insight) {
+      return parsed;
+    }
+    throw new Error("Invalid response format");
 
   } catch (error) {
-    console.error('Error generating batch AI context with OpenRouter:', error);
-    // Fallback to simpler generated text if API rate limits hit
+    console.error('Error generating single AI insight with OpenRouter:', error);
     const fallbackPersonas = {
-      student: `A great case study for understanding ${category} trends. Key takeaway: Watch how market dynamics shape outcomes here.`,
-      investor: `Potential market signal. If this scales, expect ripple effects across the ${category} sector.`,
+      student: `A great case study for understanding ${article.category || 'news'} trends. Key takeaway: Watch how market dynamics shape outcomes here.`,
+      investor: `Potential market signal. If this scales, expect ripple effects across the sector.`,
       founder: `Interesting pivot point. Competitors might adapt similar strategies to gain traction.`
     };
-    
     const personas = ['student', 'investor', 'founder'];
-    return titles.map(() => {
-      const randomPersona = personas[Math.floor(Math.random() * personas.length)];
-      return {
-        persona: randomPersona,
-        insight: fallbackPersonas[randomPersona]
-      };
-    });
+    const randomPersona = personas[Math.floor(Math.random() * personas.length)];
+    return {
+      persona: randomPersona,
+      insight: fallbackPersonas[randomPersona]
+    };
   }
 };
 
@@ -124,15 +113,11 @@ export const fetchNewsForInterests = async (interests) => {
         if (response.data.status === 'ok') {
           const items = response.data.items.slice(0, 10); // Take top 10 per category
           
-          // Batch generate AI contexts for all items in this category (1 API call instead of 10)
-          const titles = items.map(item => item.title);
-          const aiContexts = await generateBatchAiContexts(titles, interest);
-          
           const articlesWithContext = items.map((item, index) => ({
             ...item,
             id: item.guid || item.link,
             category: interest,
-            aiInsight: aiContexts[index],
+            aiInsight: null,
             timestamp: new Date(item.pubDate).getTime()
           }));
           

@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Bookmark, Heart, Share2, Sparkles, User, Lightbulb } from 'lucide-react';
+import { Bookmark, Sparkles } from 'lucide-react';
 import { AppContext } from '../context/AppContext';
 import { motion } from 'framer-motion';
 
@@ -23,18 +23,6 @@ const ArticleCard = ({ article, index }) => {
   let cleanDesc = article.description?.replace(/<\/?[^>]+(>|$)/g, "") || '';
   if (cleanDesc.length > 150) cleanDesc = cleanDesc.substring(0, 150) + '...';
 
-  // AI Persona config
-  const personaIcons = {
-    student: <Lightbulb size={18} />,
-    investor: <Heart size={18} />, 
-    founder: <User size={18} />
-  };
-  const personaLabels = {
-    student: "Student Explanation",
-    investor: "Investor Insight",
-    founder: "Founder Perspective"
-  };
-
   return (
     <motion.article 
       initial={{ opacity: 0, y: 30 }}
@@ -49,28 +37,6 @@ const ArticleCard = ({ article, index }) => {
         height: '100%'
       }}
     >
-      {/* AI Header Badge */}
-      <div style={{
-        background: 'rgba(99, 102, 241, 0.15)',
-        borderBottom: '1px solid rgba(99, 102, 241, 0.2)',
-        padding: '12px 20px',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '10px',
-      }}>
-        <div style={{ color: 'var(--accent-primary)', display: 'flex' }}>
-          <Sparkles size={18} />
-        </div>
-        <div style={{ flex: 1 }}>
-          <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--accent-primary)', fontWeight: 700 }}>
-            {personaLabels[article.aiInsight?.persona] || 'AI Generated Context'}
-          </span>
-          <p style={{ fontSize: '0.875rem', color: 'var(--text-primary)', marginTop: '4px', lineHeight: 1.4 }}>
-            "{article.aiInsight?.insight || 'A fascinating read for your profile.'}"
-          </p>
-        </div>
-      </div>
-
       {imageUrl && (
         <div style={{ height: '200px', width: '100%', overflow: 'hidden' }}>
           <img 
