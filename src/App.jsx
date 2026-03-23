@@ -6,6 +6,7 @@ import Onboarding from './pages/Onboarding';
 import Feed from './pages/Feed';
 import Bookmarks from './pages/Bookmarks';
 import ChatSidebar from './components/ChatSidebar';
+import ProfileSidebar from './components/ProfileSidebar';
 import './index.css';
 
 const ProtectedRoute = ({ children }) => {
@@ -52,6 +53,7 @@ function App() {
       <Router>
         <AppRoutes />
         <ChatSidebar />
+        <ProfileSidebar />
       </Router>
     </AppProvider>
   );

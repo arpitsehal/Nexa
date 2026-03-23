@@ -3,9 +3,11 @@ import { AppContext } from '../context/AppContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Send, Bot, User, Sparkles } from 'lucide-react';
 import { askArticleQuestion } from '../services/newsService';
+import { db } from '../firebase';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 
 const ChatSidebar = () => {
-  const { activeChatArticle, setActiveChatArticle } = useContext(AppContext);
+  const { user, activeChatArticle, setActiveChatArticle } = useContext(AppContext);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -20,27 +22,49 @@ const ChatSidebar = () => {
     scrollToBottom();
   }, [messages, loading]);
 
-  // Reset chat when a new article is selected
+  // Reset chat or load from Firestore when a new article is selected
   useEffect(() => {
-    if (activeChatArticle) {
-      setMessages([
-        { role: 'assistant', content: `Hi! I'm your AI assistant. Ask me anything about "${activeChatArticle.title}".` }
-      ]);
+    const loadChat = async () => {
+      if (!activeChatArticle || !user) return;
+      
+      setLoading(true);
+      try {
+        const safeId = encodeURIComponent(activeChatArticle.id).replace(/\./g, '_');
+        const chatRef = doc(db, 'users', user.uid, 'chats', safeId);
+        const docSnap = await getDoc(chatRef);
+        
+        if (docSnap.exists() && docSnap.data().messages) {
+          setMessages(docSnap.data().messages);
+        } else {
+          setMessages([
+            { role: 'assistant', content: `Hi! I'm your AI assistant. Ask me anything about "${activeChatArticle.title}".` }
+          ]);
+        }
+      } catch (error) {
+        console.error("Error loading chat:", error);
+        setMessages([
+          { role: 'assistant', content: `Hi! I'm your AI assistant. Ask me anything about "${activeChatArticle.title}".` }
+        ]);
+      }
+      setLoading(false);
       setInput('');
-    }
-  }, [activeChatArticle]);
+    };
+    
+    loadChat();
+  }, [activeChatArticle, user]);
 
   if (!activeChatArticle) return null;
 
-  const handleSend = async (e) => {
-    e.preventDefault();
-    if (!input.trim() || loading) return;
+  const handleSendMessage = async (e, predefinedMessage = null) => {
+    if (e) e.preventDefault();
+    
+    const messageText = predefinedMessage || input.trim();
+    if (!messageText.trim() || loading) return;
 
-    const userMessage = input.trim();
     setInput('');
     
     // Add user message to UI
-    const newMessages = [...messages, { role: 'user', content: userMessage }];
+    const newMessages = [...messages, { role: 'user', content: messageText }];
     setMessages(newMessages);
     setLoading(true);
 
@@ -49,10 +73,26 @@ const ChatSidebar = () => {
       content: m.content
     }));
     
-    const aiResponse = await askArticleQuestion(activeChatArticle, historyForApi.slice(0, -1), userMessage);
+    const aiResponse = await askArticleQuestion(activeChatArticle, historyForApi, messageText);
     
-    setMessages([...newMessages, { role: 'assistant', content: aiResponse }]);
+    const finalMessages = [...newMessages, { role: 'assistant', content: aiResponse }];
+    setMessages(finalMessages);
     setLoading(false);
+
+    // Save strictly to Firestore seamlessly in background
+    if (user && activeChatArticle) {
+      try {
+        const safeId = encodeURIComponent(activeChatArticle.id).replace(/\./g, '_');
+        const chatRef = doc(db, 'users', user.uid, 'chats', safeId);
+        await setDoc(chatRef, { 
+          articleTitle: activeChatArticle.title,
+          updatedAt: new Date().toISOString(),
+          messages: finalMessages 
+        }, { merge: true });
+      } catch (err) {
+        console.error("Failed to save chat to cloud:", err);
+      }
+    }
   };
 
   return (
@@ -175,8 +215,42 @@ const ChatSidebar = () => {
         </div>
 
         {/* Input Area */}
-        <div style={{ padding: '20px', borderTop: '1px solid var(--glass-border)' }}>
-          <form onSubmit={handleSend} style={{ display: 'flex', gap: '10px' }}>
+        <div style={{ 
+          padding: '20px', 
+          borderTop: '1px solid var(--glass-border)',
+          background: 'rgba(10, 10, 11, 0.95)'
+        }}>
+          {/* Quick Actions */}
+          {messages.length === 1 && (
+            <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', marginBottom: '12px', paddingBottom: '4px' }} className="no-scrollbar">
+              <button 
+                onClick={() => handleSendMessage(null, "Analyze the market impact. List 3 specific public companies or industries affected by this news and explain why.")}
+                style={{ 
+                  background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(139, 92, 246, 0.3)',
+                  padding: '6px 12px', borderRadius: '16px', fontSize: '0.75rem', color: 'var(--accent-secondary)',
+                  whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer'
+                }}
+                onMouseOver={(e) => e.currentTarget.style.background = 'rgba(139, 92, 246, 0.1)'}
+                onMouseOut={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'}
+              >
+                📉 Analyze Market Impact
+              </button>
+              <button 
+                onClick={() => handleSendMessage(null, "Summarize this article in exactly 3 short bullet points.")}
+                style={{ 
+                  background: 'rgba(255,255,255,0.03)', border: '1px solid var(--glass-border)',
+                  padding: '6px 12px', borderRadius: '16px', fontSize: '0.75rem', color: 'var(--text-secondary)',
+                  whiteSpace: 'nowrap', cursor: 'pointer'
+                }}
+                onMouseOver={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
+                onMouseOut={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.03)'}
+              >
+                📝 TL;DR Summary
+              </button>
+            </div>
+          )}
+
+          <form onSubmit={(e) => handleSendMessage(e)} style={{ display: 'flex', gap: '10px' }}>
             <input
               type="text"
               value={input}

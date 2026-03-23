@@ -2,16 +2,56 @@ import axios from 'axios';
 
 // Using free RSS to JSON API with public NYT/BBC feeds mapped to categories
 const CATEGORY_FEEDS = {
-  startup: 'https://news.ycombinator.com/rss',
-  finance: 'https://feeds.a.dj.com/rss/WSJcomUSBusiness.xml',
-  tech: 'https://techcrunch.com/feed/',
-  politics: 'http://feeds.bbci.co.uk/news/politics/rss.xml',
-  gaming: 'https://kotaku.com/rss',
-  business: 'http://feeds.bbci.co.uk/news/business/rss.xml',
-  health: 'http://feeds.bbci.co.uk/news/health/rss.xml',
-  entertainment: 'http://feeds.bbci.co.uk/news/entertainment_and_arts/rss.xml',
-  innovation: 'https://cdn.arstechnica.net/arstechnica.xml',
-  world: 'http://feeds.bbci.co.uk/news/world/rss.xml',
+  startup: [
+    'https://news.ycombinator.com/rss',
+    'https://www.entrepreneur.com/latest.rss',
+    'https://www.inc.com/rss'
+  ],
+  finance: [
+    'https://feeds.a.dj.com/rss/WSJcomUSBusiness.xml',
+    'https://search.cnbc.com/rs/search/combinedcms/view.xml?id=10000664',
+    'https://seekingalpha.com/market_currents.xml'
+  ],
+  tech: [
+    'https://techcrunch.com/feed/',
+    'https://www.theverge.com/rss/index.xml',
+    'https://www.wired.com/feed/rss'
+  ],
+  politics: [
+    'http://feeds.bbci.co.uk/news/politics/rss.xml',
+    'https://rss.politico.com/politics-news.xml',
+    'https://thehill.com/homenews/politics/feed/'
+  ],
+  gaming: [
+    'https://kotaku.com/rss',
+    'https://www.polygon.com/rss/index.xml',
+    'https://www.ign.com/rss/articles/feed'
+  ],
+  business: [
+    'http://feeds.bbci.co.uk/news/business/rss.xml',
+    'https://feeds.bloomberg.com/markets/news.rss',
+    'http://feeds.reuters.com/reuters/businessNews'
+  ],
+  health: [
+    'http://feeds.bbci.co.uk/news/health/rss.xml',
+    'https://www.medicalnewstoday.com/feed',
+    'https://www.healthline.com/rss'
+  ],
+  entertainment: [
+    'http://feeds.bbci.co.uk/news/entertainment_and_arts/rss.xml',
+    'https://variety.com/feed/',
+    'https://www.hollywoodreporter.com/feed/'
+  ],
+  innovation: [
+    'https://cdn.arstechnica.net/arstechnica.xml',
+    'https://www.technologyreview.com/feed/',
+    'https://singularityhub.com/feed/'
+  ],
+  world: [
+    'http://feeds.bbci.co.uk/news/world/rss.xml',
+    'https://www.aljazeera.com/xml/rss/all.xml',
+    'http://rss.cnn.com/rss/edition_world.rss'
+  ],
 };
 
 export const OPENROUTER_API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY;
@@ -68,6 +108,36 @@ Return ONLY a valid JSON object with exactly two string keys: "persona" and "ins
   }
 };
 
+export const generateAudioBriefing = async (articles) => {
+  try {
+    const prompt = `You are an energetic morning news anchor for a personalized radio station called Nexa Radio. 
+Write a cohesive, engaging 1-minute radio script summarizing these ${articles.length} news stories. 
+Transition smoothly between them. Do not include markdown, emojis, or stage directions. Return ONLY the spoken words.
+
+Articles:
+${articles.map((a, i) => `${i + 1}. Title: ${a.title}\nDescription: ${a.description}`).join('\n\n')}`;
+
+    const response = await axios.post(
+      'https://openrouter.ai/api/v1/chat/completions',
+      {
+        model: 'openrouter/free',
+        messages: [{ role: 'user', content: prompt }]
+      },
+      {
+        headers: {
+          'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+    
+    return response.data.choices[0].message.content.replace(/[\*\#\[\]]/g, ''); // strip markdown
+  } catch (error) {
+    console.error('Error generating audio briefing:', error);
+    return "Welcome to Nexa. We experienced a slight delay retrieving your personalized script today, but please enjoy reading your curated feed below.";
+  }
+};
+
 export const askArticleQuestion = async (article, chatHistory, newQuestion) => {
   try {
     const systemPrompt = `You are a helpful AI news assistant. The user is reading an article titled "${article.title}" about "${article.category}". 
@@ -102,12 +172,27 @@ IMPORTANT: Use plain text only. Use paragraph breaks for readable spacing, but D
   }
 };
 
-export const fetchNewsForInterests = async (interests) => {
+export const fetchNewsForInterests = async (interests, customFeeds = [], page = 0) => {
   try {
-    const promises = interests.map(async (interest) => {
+    const builtInFeeds = interests.map(interest => {
+      const feedArray = CATEGORY_FEEDS[interest] || CATEGORY_FEEDS.world;
+      // Rotate through the array based on page number
+      const url = feedArray[page % feedArray.length];
+      return { url, category: interest };
+    });
+    
+    // For custom feeds, fetch one different custom feed per page if they have multiple
+    let userFeeds = [];
+    if (customFeeds.length > 0) {
+      const customUrl = customFeeds[page % customFeeds.length];
+      userFeeds = [{ url: customUrl, category: 'Custom Feed' }];
+    }
+    
+    const allSources = [...builtInFeeds, ...userFeeds];
+
+    const promises = allSources.map(async (source) => {
       try {
-        const feedUrl = CATEGORY_FEEDS[interest] || CATEGORY_FEEDS.world;
-        const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}`;
+        const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(source.url)}`;
         
         const response = await axios.get(apiUrl);
         if (response.data.status === 'ok') {
@@ -116,7 +201,7 @@ export const fetchNewsForInterests = async (interests) => {
           const articlesWithContext = items.map((item, index) => ({
             ...item,
             id: item.guid || item.link,
-            category: interest,
+            category: source.category,
             aiInsight: null,
             timestamp: new Date(item.pubDate).getTime()
           }));
