@@ -54,7 +54,7 @@ const Onboarding = () => {
         style={{ marginBottom: '3rem', textAlign: 'center' }}
       >
         <h1 style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>
-          Welcome, <span className="text-gradient">{user?.name}</span>
+          Welcome, <span className="text-gradient">{user?.displayName?.split(' ')[0] || 'there'}</span>
         </h1>
         <p style={{ color: 'var(--text-secondary)', fontSize: '1.2rem', maxWidth: '600px', margin: '0 auto' }}>
           Let's tailor your newsroom. Select the topics you care about, and our Gen AI will curate the perfect feed for you.

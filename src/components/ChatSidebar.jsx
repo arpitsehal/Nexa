@@ -95,7 +95,7 @@ const ChatSidebar = () => {
               <Bot size={20} color="white" />
             </div>
             <div>
-              <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 600 }}>Ask AI</h3>
+              <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 600 }}>Nexa AI</h3>
               <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--text-secondary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '200px' }}>
                 {activeChatArticle.title}
               </p>

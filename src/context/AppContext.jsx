@@ -1,4 +1,7 @@
 import React, { createContext, useState, useEffect } from 'react';
+import { auth, db } from '../firebase';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { doc, onSnapshot, setDoc, getDoc } from 'firebase/firestore';
 
 export const AppContext = createContext();
 
@@ -6,57 +9,94 @@ export const AppProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [interests, setInterests] = useState([]);
   const [bookmarks, setBookmarks] = useState([]);
+  const [authLoading, setAuthLoading] = useState(true);
   
-  // New state for Chat Sidebar
+  // State for Chat Sidebar
   const [activeChatArticle, setActiveChatArticle] = useState(null);
 
-  // Load from local storage
+  // Listen to Firebase Auth state and Firestore document
   useEffect(() => {
-    const savedUser = localStorage.getItem('my_et_user');
-    const savedInterests = localStorage.getItem('my_et_interests');
-    const savedBookmarks = localStorage.getItem('my_et_bookmarks');
+    let unsubscribeSnapshot = null;
 
-    if (savedUser) setUser(JSON.parse(savedUser));
-    if (savedInterests) setInterests(JSON.parse(savedInterests));
-    if (savedBookmarks) setBookmarks(JSON.parse(savedBookmarks));
+    const unsubscribeAuth = onAuthStateChanged(auth, async (currentUser) => {
+      setUser(currentUser);
+      
+      if (!currentUser) {
+        setInterests([]);
+        setBookmarks([]);
+        setAuthLoading(false);
+        if (unsubscribeSnapshot) unsubscribeSnapshot();
+        return;
+      }
+      
+      // Listen to Firestore document for this user
+      const userRef = doc(db, 'users', currentUser.uid);
+      
+      // Initialize default cloud document if there isn't one yet
+      const docSnap = await getDoc(userRef);
+      if (!docSnap.exists()) {
+        await setDoc(userRef, { interests: [], bookmarks: [] });
+      }
+
+      // Real-time listen to cloud database
+      unsubscribeSnapshot = onSnapshot(userRef, (doc) => {
+        if (doc.exists()) {
+          const data = doc.data();
+          setInterests(data.interests || []);
+          setBookmarks(data.bookmarks || []);
+        }
+        setAuthLoading(false);
+      });
+    });
+
+    return () => {
+      unsubscribeAuth();
+      if (unsubscribeSnapshot) unsubscribeSnapshot();
+    };
   }, []);
 
-  // Save to local storage on change
-  useEffect(() => {
-    if (user) localStorage.setItem('my_et_user', JSON.stringify(user));
-  }, [user]);
-
-  useEffect(() => {
-    localStorage.setItem('my_et_interests', JSON.stringify(interests));
-  }, [interests]);
-
-  useEffect(() => {
-    localStorage.setItem('my_et_bookmarks', JSON.stringify(bookmarks));
-  }, [bookmarks]);
-
-  const login = (name) => setUser({ name });
-  const logout = () => {
-    setUser(null);
-    setInterests([]);
-    setBookmarks([]);
-    setActiveChatArticle(null);
-    localStorage.clear();
+  const saveInterests = async (newInterests) => {
+    // Optimistic UI update
+    setInterests(newInterests);
+    
+    // Cloud save
+    if (user) {
+      const userRef = doc(db, 'users', user.uid);
+      await setDoc(userRef, { interests: newInterests }, { merge: true });
+    }
   };
 
-  const toggleBookmark = (article) => {
-    setBookmarks(prev => {
-      const exists = prev.find(b => b.title === article.title);
-      if (exists) return prev.filter(b => b.title !== article.title);
-      return [...prev, article];
-    });
+  const toggleBookmark = async (article) => {
+    // Find if already bookmarked
+    const exists = bookmarks.find(b => b.title === article.title);
+    
+    // Optimistic array generation
+    const newBookmarks = exists 
+      ? bookmarks.filter(b => b.title !== article.title)
+      : [...bookmarks, article];
+    
+    // Optimistic state set
+    setBookmarks(newBookmarks);
+    
+    // Cloud save
+    if (user) {
+      const userRef = doc(db, 'users', user.uid);
+      await setDoc(userRef, { bookmarks: newBookmarks }, { merge: true });
+    }
+  };
+
+  const logout = () => {
+    signOut(auth);
+    setActiveChatArticle(null);
   };
 
   return (
     <AppContext.Provider value={{
-      user, login, logout,
-      interests, setInterests,
+      user, logout,
+      interests, setInterests: saveInterests,
       bookmarks, toggleBookmark,
-      activeChatArticle, setActiveChatArticle
+      activeChatArticle, setActiveChatArticle,
+      authLoading
     }}>
       {children}
     </AppContext.Provider>

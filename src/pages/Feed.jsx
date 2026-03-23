@@ -44,14 +44,12 @@ const Feed = () => {
       }}>
         <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div style={{ 
-              width: '40px', height: '40px', borderRadius: '10px', 
-              background: 'var(--accent-gradient)', display: 'flex', 
-              alignItems: 'center', justifyContent: 'center'
-            }}>
-              <Sparkles size={20} color="white" />
-            </div>
-            <h2 style={{ fontSize: '1.5rem', fontWeight: 800 }}>My ET</h2>
+            <img 
+              src="/Nexa.png" 
+              alt="Nexa Logo" 
+              style={{ width: '40px', height: '40px', objectFit: 'contain' }} 
+            />
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 800 }}>Nexa</h2>
           </div>
           
           <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>

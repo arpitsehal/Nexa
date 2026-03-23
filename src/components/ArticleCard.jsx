@@ -127,7 +127,7 @@ const ArticleCard = ({ article, index }) => {
             onMouseOut={(e) => e.currentTarget.style.background = 'rgba(99, 102, 241, 0.1)'}
           >
             <Sparkles size={16} />
-            <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>Ask AI</span>
+            <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>Nexa AI</span>
           </button>
           
           <button onClick={() => toggleBookmark(article)} style={{ color: isBookmarked ? 'var(--accent-primary)' : 'var(--text-muted)', transition: 'color 0.2s' }}>

@@ -14,7 +14,7 @@ const CATEGORY_FEEDS = {
   world: 'http://feeds.bbci.co.uk/news/world/rss.xml',
 };
 
-export const OPENROUTER_API_KEY = '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';
+export const OPENROUTER_API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY;
 
 // Batch AI Context Generator using OpenRouter Free Models
 const generateBatchAiContexts = async (titles, category) => {
