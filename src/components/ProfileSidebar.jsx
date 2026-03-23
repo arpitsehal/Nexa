@@ -24,9 +24,15 @@ const ProfileSidebar = () => {
   };
 
   const handleAddRss = () => {
-    if (newRss.trim() && newRss.startsWith('http')) {
+    if (newRss.trim() && newRss.startsWith('http') && !customFeeds.includes(newRss.trim())) {
       setCustomFeeds([...customFeeds, newRss.trim()]);
       setNewRss('');
+    }
+  };
+
+  const handleAddSpecificRss = (url) => {
+    if (!customFeeds.includes(url)) {
+      setCustomFeeds([...customFeeds, url]);
     }
   };
 
@@ -106,10 +112,13 @@ const ProfileSidebar = () => {
                     exit={{ opacity: 0, height: 0 }}
                     style={{ padding: '0 16px', display: 'flex', flexDirection: 'column', gap: '12px', overflow: 'hidden', marginBottom: '8px' }}
                   >
+                    <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', margin: '0 0 -4px 0', lineHeight: 1.4 }}>
+                      Paste any RSS link below to inject those articles directly into your daily feed!
+                    </p>
                     <div style={{ display: 'flex', gap: '8px' }}>
                       <input 
                         type="url" 
-                        placeholder="https://example.com/rss" 
+                        placeholder="e.g. https://techcrunch.com/feed/" 
                         value={newRss}
                         onChange={(e) => setNewRss(e.target.value)}
                         style={{ flex: 1, width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1px solid var(--glass-border)', background: 'rgba(0,0,0,0.2)', color: 'white', outline: 'none', fontSize: '0.85rem' }}
@@ -118,6 +127,14 @@ const ProfileSidebar = () => {
                         <Plus size={16} />
                       </button>
                     </div>
+                    
+                    {customFeeds.length === 0 && (
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: '4px' }}>
+                        <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', width: '100%' }}>Try clicking an example:</span>
+                        <button onClick={() => handleAddSpecificRss('https://www.nasa.gov/rss/dyn/breaking_news.rss')} style={{ fontSize: '0.7rem', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--glass-border)', padding: '4px 8px', borderRadius: '12px', color: 'var(--text-secondary)', cursor: 'pointer' }}>🚀 NASA Breaking News</button>
+                        <button onClick={() => handleAddSpecificRss('https://www.espn.com/espn/rss/news')} style={{ fontSize: '0.7rem', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--glass-border)', padding: '4px 8px', borderRadius: '12px', color: 'var(--text-secondary)', cursor: 'pointer' }}>🏈 ESPN Top Sports</button>
+                      </div>
+                    )}
                     
                     {customFeeds.map((feed, idx) => (
                       <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255,255,255,0.05)', padding: '8px 12px', borderRadius: '8px' }}>
