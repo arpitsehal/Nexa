@@ -55,6 +55,12 @@ Create a `.env` file in the root directory and add your keys:
    npm run dev
    ```
 
+## Documentation
+
+- [Architecture & Business Model Presentation](./docs/Nexa%20Architecture%20&%20Buisness%20Model.pdf)
+- [Technical Architecture Details](./ARCHITECTURE.md)
+- [Business Impact Estimates](./IMPACT.md)
+
 ## Project Structure
 
 - `src/components/`: Reusable UI components (ArticleCard, ChatSidebar, ProfileSidebar, etc.)
