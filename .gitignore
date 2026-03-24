@@ -27,3 +27,13 @@ dist-ssr
 .env
 .env.*
 !.env.example
+
+# Android build outputs & APK files (contain baked-in API keys)
+*.apk
+*.aab
+android/app/build/
+android/.gradle/
+android/local.properties
+
+# Dist (also contains bundled keys)
+dist/
