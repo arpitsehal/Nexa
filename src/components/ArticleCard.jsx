@@ -1,12 +1,26 @@
-import React, { useContext } from 'react';
-import { Bookmark, Sparkles } from 'lucide-react';
+import React, { useContext, useState } from 'react';
+import { Bookmark, Sparkles, Share2 } from 'lucide-react';
 import { AppContext } from '../context/AppContext';
 import { motion } from 'framer-motion';
 
 const ArticleCard = ({ article, index }) => {
   const { toggleBookmark, bookmarks, setActiveChatArticle } = useContext(AppContext);
+  const [copied, setCopied] = useState(false);
   
   const isBookmarked = bookmarks.some(b => b.title === article.title);
+
+  const handleShare = async () => {
+    const url = article.link;
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: article.title, url });
+      } catch (_) {}
+    } else {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
 
   // Format date
   const dateObj = new Date(article.pubDate);
@@ -96,9 +110,30 @@ const ArticleCard = ({ article, index }) => {
             <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>Nexa AI</span>
           </button>
           
-          <button onClick={() => toggleBookmark(article)} style={{ color: isBookmarked ? 'var(--accent-primary)' : 'var(--text-muted)', transition: 'color 0.2s' }}>
-            <Bookmark size={22} fill={isBookmarked ? 'var(--accent-primary)' : 'none'} color={isBookmarked ? 'var(--accent-primary)' : 'currentColor'} />
-          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div style={{ position: 'relative' }}>
+              <button
+                onClick={handleShare}
+                title="Share article"
+                style={{ color: copied ? 'var(--accent-secondary)' : 'var(--text-muted)', transition: 'color 0.2s' }}
+              >
+                <Share2 size={20} />
+              </button>
+              {copied && (
+                <span style={{
+                  position: 'absolute', bottom: '130%', left: '50%', transform: 'translateX(-50%)',
+                  background: 'var(--accent-secondary)', color: '#fff',
+                  fontSize: '0.72rem', fontWeight: 600, padding: '3px 8px',
+                  borderRadius: '8px', whiteSpace: 'nowrap', pointerEvents: 'none'
+                }}>
+                  Copied!
+                </span>
+              )}
+            </div>
+            <button onClick={() => toggleBookmark(article)} style={{ color: isBookmarked ? 'var(--accent-primary)' : 'var(--text-muted)', transition: 'color 0.2s' }}>
+              <Bookmark size={22} fill={isBookmarked ? 'var(--accent-primary)' : 'none'} color={isBookmarked ? 'var(--accent-primary)' : 'currentColor'} />
+            </button>
+          </div>
         </div>
       </div>
     </motion.article>
