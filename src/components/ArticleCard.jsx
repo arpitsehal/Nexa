@@ -107,7 +107,7 @@ const ArticleCard = ({ article, index }) => {
             onMouseOut={(e) => e.currentTarget.style.background = 'rgba(99, 102, 241, 0.1)'}
           >
             <Sparkles size={16} />
-            <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>Nexa AI</span>
+            <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>Ask AI</span>
           </button>
           
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
