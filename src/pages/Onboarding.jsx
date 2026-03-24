@@ -53,7 +53,7 @@ const Onboarding = () => {
         className="text-center"
         style={{ marginBottom: '3rem', textAlign: 'center' }}
       >
-        <h1 style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>
+        <h1 style={{ fontSize: 'clamp(1.75rem, 5vw, 2.5rem)', marginBottom: '1rem' }}>
           Welcome, <span className="text-gradient">{user?.displayName?.split(' ')[0] || 'there'}</span>
         </h1>
         <p style={{ color: 'var(--text-secondary)', fontSize: '1.2rem', maxWidth: '600px', margin: '0 auto' }}>
@@ -63,7 +63,7 @@ const Onboarding = () => {
 
       <div style={{ 
         display: 'grid', 
-        gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', 
+        gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 140px), 1fr))', 
         gap: '1.5rem',
         maxWidth: '1000px',
         margin: '0 auto',

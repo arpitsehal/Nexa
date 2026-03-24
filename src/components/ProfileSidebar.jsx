@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { AppContext } from '../context/AppContext';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, LogOut, Bookmark, Settings, Rss, Moon, Sun, Plus, Trash2 } from 'lucide-react';
+import { X, LogOut, Bookmark, Settings, Rss, Moon, Sun, Plus, Trash2, Smartphone } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const ProfileSidebar = () => {
@@ -97,6 +97,10 @@ const ProfileSidebar = () => {
               <button onClick={() => handleNavigate('/onboarding')} className="sidebar-link">
                 <Settings size={20} /> Manage Interests
               </button>
+
+              <a href="/app-release.apk" download className="sidebar-link" style={{ color: 'var(--success)' }}>
+                <Smartphone size={20} /> Install Android App
+              </a>
 
               <div style={{ margin: '16px 0', height: '1px', background: 'var(--glass-border)' }} />
 

@@ -47,7 +47,7 @@ const Login = () => {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
         className="glass-card" 
-        style={{ padding: '3rem', maxWidth: '440px', width: '100%', textAlign: 'center' }}
+        style={{ padding: 'clamp(1.5rem, 5vw, 3rem)', maxWidth: '440px', width: '100%', textAlign: 'center' }}
       >
         <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.5rem' }}>
           <img 

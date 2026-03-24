@@ -235,3 +235,41 @@ button {
     display: inline-block;
   }
 }
+
+/* Mobile Responsiveness Improvements */
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 16px; /* Reduced from 24px for smaller screens */
+  }
+
+  /* Responsive Typography */
+  h1 {
+    font-size: 2rem !important; /* Scale down giant headers */
+  }
+  
+  h2 {
+    font-size: 1.5rem !important;
+  }
+
+  /* Adjust buttons to fit better horizontally */
+  .btn-primary, .btn-secondary {
+    padding: 10px 20px;
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 12px;
+  }
+  
+  h1 {
+    font-size: 1.75rem !important;
+  }
+  
+  p {
+    font-size: 0.95rem;
+  }
+}
+

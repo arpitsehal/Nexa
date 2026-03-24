@@ -159,7 +159,7 @@ const Feed = () => {
           <motion.h1 
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            style={{ fontSize: '3rem', marginBottom: '8px' }}
+            style={{ fontSize: 'clamp(2rem, 8vw, 3rem)', marginBottom: '8px' }}
           >
             Your Daily <span className="text-gradient">Intel</span>
           </motion.h1>
@@ -216,9 +216,9 @@ const Feed = () => {
           <>
             <div style={{ 
               display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', 
-            gap: '30px' 
-          }}>
+              gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 300px), 1fr))', 
+              gap: '24px' 
+            }}>
             {articles.length > 0 ? (
               articles.map((article, idx) => (
                 <ArticleCard key={article.id || idx} article={article} index={idx} />
