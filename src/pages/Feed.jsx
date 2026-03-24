@@ -125,11 +125,21 @@ const Feed = () => {
       }}>
         <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <img 
-              src="/Nexa.png" 
-              alt="Nexa Logo" 
-              style={{ width: '40px', height: '40px', objectFit: 'contain' }} 
-            />
+            <div style={{
+              width: '40px', height: '40px',
+              borderRadius: '50%',
+              background: '#ffffff',
+              border: '1px solid rgba(0,0,0,0.15)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              overflow: 'hidden',
+              flexShrink: 0
+            }}>
+              <img 
+                src="/Nexa.png" 
+                alt="Nexa Logo" 
+                style={{ width: '28px', height: '28px', objectFit: 'contain' }} 
+              />
+            </div>
             <h2 style={{ fontSize: '1.5rem', fontWeight: 800 }}>Nexa</h2>
           </div>
           

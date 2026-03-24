@@ -12,6 +12,7 @@ Nexa is a modern, personalized news reader application built with React and Vite
 - **Custom RSS Feeds:** Support for pulling in your own custom news sources alongside the built-in curated feeds.
 - **Secure Authentication:** Firebase-powered user authentication and protected routes.
 - **Modern UI/UX:** Stunning glassmorphism design, smooth Framer Motion animations, dark theme, and fully responsive layout.
+- **Android App (APK):** Install Nexa directly on any Android device — no Play Store needed. Built with Capacitor for a native app experience.
 
 ## Tech Stack
 
@@ -21,6 +22,7 @@ Nexa is a modern, personalized news reader application built with React and Vite
 - **Backend/BaaS:** Firebase (Authentication, Firestore Database)
 - **AI Integration:** OpenRouter API (LLM for insights, audio scripts, and chat)
 - **Data Fetching:** Axios, RSS-to-JSON API
+- **Mobile:** Capacitor (Android APK packaging)
 
 ## Getting Started
 
@@ -54,6 +56,17 @@ Create a `.env` file in the root directory and add your keys:
    ```bash
    npm run dev
    ```
+
+### Mobile Installation (Android APK)
+
+You can install Nexa directly on any Android device without the Play Store:
+
+1. **Download** the latest `app-debug.apk` from the [Releases](../../releases) page.
+2. On your Android device, go to **Settings → Security** and enable **"Install from Unknown Sources"** (or "Install Unknown Apps" on Android 8+).
+3. Open the downloaded APK file and tap **Install**.
+4. Launch **Nexa** from your home screen.
+
+> **Note:** This is a debug build intended for testing. For a production release, a signed APK/AAB should be used.
 
 ## Documentation
 
