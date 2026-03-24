@@ -98,7 +98,7 @@ const ProfileSidebar = () => {
                 <Settings size={20} /> Manage Interests
               </button>
 
-              <a href="/app-release.apk" download className="sidebar-link" style={{ color: 'var(--success)' }}>
+              <a href="/app-debug.apk" download="Nexa.apk" className="sidebar-link" style={{ color: 'var(--success)' }}>
                 <Smartphone size={20} /> Install Android App
               </a>
 
