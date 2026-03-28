@@ -2,6 +2,10 @@
 
 Nexa is a modern, personalized news reader application built with React and Vite. It leverages the power of Artificial Intelligence to curate, summarize, and provide deep insights into your daily news feed based on your specific interests.
 
+## 🌐 Live Demo
+
+> **Nexa is live!** Check it out at **[www.nexanews.tech](https://www.nexanews.tech)**
+
 ## Features
 
 - **Personalized Onboarding & Interests:** Select from various categories (Startups, Finance, Tech, Politics, Gaming, Business, Health, Entertainment, Innovation, World) to tailor your newsroom.
