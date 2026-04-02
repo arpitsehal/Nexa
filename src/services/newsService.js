@@ -3,9 +3,9 @@ import axios from 'axios';
 // Using free RSS to JSON API with public NYT/BBC feeds mapped to categories
 const CATEGORY_FEEDS = {
   startup: [
-    'https://news.ycombinator.com/rss',
-    'https://www.entrepreneur.com/latest.rss',
-    'https://www.inc.com/rss'
+    'https://techcrunch.com/category/startups/feed/',
+    'https://venturebeat.com/feed/',
+    'https://www.entrepreneur.com/latest.rss'
   ],
   finance: [
     'https://feeds.a.dj.com/rss/WSJcomUSBusiness.xml',
