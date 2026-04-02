@@ -43,9 +43,9 @@ const CATEGORY_FEEDS = {
     'https://www.hollywoodreporter.com/feed/'
   ],
   innovation: [
-    'https://cdn.arstechnica.net/arstechnica.xml',
-    'https://www.technologyreview.com/feed/',
-    'https://singularityhub.com/feed/'
+    'https://feeds.arstechnica.com/arstechnica/index',
+    'https://www.wired.com/feed/category/ideas/latest/rss',
+    'https://www.theverge.com/rss/index.xml'
   ],
   world: [
     'http://feeds.bbci.co.uk/news/world/rss.xml',
