@@ -1,7 +1,5 @@
 # Nexa - Your AI-Powered Daily Intel
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
 Nexa is a modern, personalized news reader application built with React and Vite. It leverages the power of Artificial Intelligence to curate, summarize, and provide deep insights into your daily news feed based on your specific interests.
 
 ## 🌐 Live Demo
@@ -90,8 +88,4 @@ You can install Nexa directly on any Android device without the Play Store:
 
 ## Contributing
 
-Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md) to learn about our development process, how to propose bugfixes and improvements, and how to build and test your changes to Nexa.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+Contributions are welcome! Feel free to open an issue or submit a pull request if you'd like to improve the app or add new features.
