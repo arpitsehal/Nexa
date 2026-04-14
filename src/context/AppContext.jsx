@@ -11,9 +11,13 @@ export const AppProvider = ({ children }) => {
   const [bookmarks, setBookmarks] = useState([]);
   const [customFeeds, setCustomFeeds] = useState([]);
   const [authLoading, setAuthLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
   
   // Theme State
   const [theme, setTheme] = useState(localStorage.getItem('nexa-theme') || 'dark');
+
+  // Admin emails list
+  const ADMIN_EMAILS = ['2005sehalarpit@gmail.com'];
 
   // State for Chat Sidebar
   const [activeChatArticle, setActiveChatArticle] = useState(null);
@@ -40,18 +44,37 @@ export const AppProvider = ({ children }) => {
         setInterests([]);
         setBookmarks([]);
         setCustomFeeds([]);
+        setIsAdmin(false);
         setAuthLoading(false);
         if (unsubscribeSnapshot) unsubscribeSnapshot();
         return;
       }
+
+      // Set admin status
+      setIsAdmin(ADMIN_EMAILS.includes(currentUser.email));
       
       // Listen to Firestore document for this user
       const userRef = doc(db, 'users', currentUser.uid);
       
-      // Initialize default cloud document if there isn't one yet
+      // Update activity timestamps
+      const now = Date.now();
       const docSnap = await getDoc(userRef);
       if (!docSnap.exists()) {
-        await setDoc(userRef, { interests: [], bookmarks: [], customFeeds: [] });
+        await setDoc(userRef, { 
+          interests: [], 
+          bookmarks: [], 
+          customFeeds: [],
+          createdAt: now,
+          lastActive: now,
+          email: currentUser.email,
+          displayName: currentUser.displayName
+        });
+      } else {
+        // Only update lastActive if it's older than 1 hour to prevent excessive writes
+        const data = docSnap.data();
+        if (!data.lastActive || now - data.lastActive > 3600000) {
+          await setDoc(userRef, { lastActive: now }, { merge: true });
+        }
       }
 
       // Real-time listen to cloud database
@@ -79,7 +102,7 @@ export const AppProvider = ({ children }) => {
     // Cloud save
     if (user) {
       const userRef = doc(db, 'users', user.uid);
-      await setDoc(userRef, { interests: newInterests }, { merge: true });
+      await setDoc(userRef, { interests: newInterests, lastActive: Date.now() }, { merge: true });
     }
   };
 
@@ -98,7 +121,7 @@ export const AppProvider = ({ children }) => {
     // Cloud save
     if (user) {
       const userRef = doc(db, 'users', user.uid);
-      await setDoc(userRef, { bookmarks: newBookmarks }, { merge: true });
+      await setDoc(userRef, { bookmarks: newBookmarks, lastActive: Date.now() }, { merge: true });
     }
   };
 
@@ -106,18 +129,19 @@ export const AppProvider = ({ children }) => {
     setCustomFeeds(newFeeds);
     if (user) {
       const userRef = doc(db, 'users', user.uid);
-      await setDoc(userRef, { customFeeds: newFeeds }, { merge: true });
+      await setDoc(userRef, { customFeeds: newFeeds, lastActive: Date.now() }, { merge: true });
     }
   };
 
   const logout = () => {
     signOut(auth);
+    setIsAdmin(false);
     setActiveChatArticle(null);
   };
 
   return (
     <AppContext.Provider value={{
-      user, logout,
+      user, logout, isAdmin,
       interests, setInterests: saveInterests,
       bookmarks, toggleBookmark,
       customFeeds, setCustomFeeds: saveCustomFeeds,
