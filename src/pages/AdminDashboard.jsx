@@ -29,8 +29,8 @@ const AdminDashboard = () => {
     setLoading(true);
     try {
       const usersRef = collection(db, 'users');
-      const q = query(usersRef, orderBy('createdAt', 'desc'));
-      const querySnapshot = await getDocs(q);
+      // Remove orderBy because it filters out documents that don't have the field
+      const querySnapshot = await getDocs(usersRef);
       
       const allUsers = [];
       const now = Date.now();
@@ -62,7 +62,15 @@ const AdminDashboard = () => {
         active7d: a7d,
         newToday: nToday
       });
-      setRecentUsers(allUsers);
+      
+      // Sort users by createdAt desc in memory (handling users with null createdAt)
+      const sortedUsers = allUsers.sort((a, b) => {
+        const timeA = a.createdAt || 0;
+        const timeB = b.createdAt || 0;
+        return timeB - timeA;
+      });
+      
+      setRecentUsers(sortedUsers);
     } catch (error) {
       console.error("Error fetching admin data:", error);
     } finally {
