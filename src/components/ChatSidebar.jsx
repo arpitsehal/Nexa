@@ -109,13 +109,13 @@ const ChatSidebar = () => {
           width: '100%',
           maxWidth: '400px',
           height: '100vh',
-          background: 'rgba(10, 10, 11, 0.95)',
+          background: 'var(--nav-bg)',
           backdropFilter: 'blur(20px)',
           borderLeft: '1px solid var(--glass-border)',
           zIndex: 1000,
           display: 'flex',
           flexDirection: 'column',
-          boxShadow: '-10px 0 30px rgba(0, 0, 0, 0.5)'
+          boxShadow: 'var(--shadow-md)'
         }}
       >
         {/* Header */}
@@ -128,14 +128,18 @@ const ChatSidebar = () => {
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <div style={{
-              background: 'var(--accent-gradient)',
-              padding: '8px',
-              borderRadius: '8px'
+              background: '#ffffff',
+              padding: '6px',
+              borderRadius: '8px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              border: '1px solid rgba(0,0,0,0.1)'
             }}>
-              <Bot size={20} color="white" />
+              <img src="/Nexa.png" alt="Nexa" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
             </div>
             <div>
-              <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 600 }}>Nexa AI</h3>
+              <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 600, color: 'var(--text-primary)' }}>Nexa AI</h3>
               <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--text-secondary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '200px' }}>
                 {activeChatArticle.title}
               </p>
@@ -170,24 +174,27 @@ const ChatSidebar = () => {
                 width: '32px',
                 height: '32px',
                 borderRadius: '50%',
-                background: msg.role === 'user' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(139, 92, 246, 0.2)',
+                background: msg.role === 'user' ? 'var(--accent-primary)' : 'var(--glass-bg)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                flexShrink: 0
+                flexShrink: 0,
+                color: msg.role === 'user' ? 'white' : 'inherit'
               }}>
-                {msg.role === 'user' ? <User size={16} /> : <Sparkles size={16} color="var(--accent-primary)" />}
+                {msg.role === 'user' ? <User size={16} /> : <Bot size={16} color="var(--accent-primary)" />}
               </div>
               <div style={{
-                background: msg.role === 'user' ? 'var(--accent-primary)' : 'rgba(255, 255, 255, 0.05)',
+                background: msg.role === 'user' ? 'var(--accent-primary)' : 'var(--glass-bg)',
                 padding: '12px 16px',
                 borderRadius: '16px',
                 borderTopRightRadius: msg.role === 'user' ? '4px' : '16px',
                 borderTopLeftRadius: msg.role === 'user' ? '16px' : '4px',
-                color: 'var(--text-primary)',
+                color: msg.role === 'user' ? 'white' : 'var(--text-primary)',
+                border: msg.role === 'user' ? 'none' : '1px solid var(--glass-border)',
                 fontSize: '0.95rem',
                 lineHeight: 1.5,
-                whiteSpace: 'pre-wrap'
+                whiteSpace: 'pre-wrap',
+                boxShadow: 'var(--shadow-sm)'
               }}>
                 {msg.content}
               </div>
@@ -197,13 +204,15 @@ const ChatSidebar = () => {
             <div style={{ display: 'flex', gap: '12px', alignSelf: 'flex-start' }}>
               <div style={{
                 width: '32px', height: '32px', borderRadius: '50%',
-                background: 'rgba(139, 92, 246, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center'
+                background: 'var(--glass-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                border: '1px solid var(--glass-border)'
               }}>
-                <Sparkles size={16} color="var(--accent-primary)" />
+                <Bot size={16} color="var(--accent-primary)" />
               </div>
               <div style={{
-                background: 'rgba(255, 255, 255, 0.05)', padding: '12px 16px', borderRadius: '16px',
-                borderTopLeftRadius: '4px', display: 'flex', alignItems: 'center', gap: '4px'
+                background: 'var(--glass-bg)', padding: '12px 16px', borderRadius: '16px',
+                borderTopLeftRadius: '4px', display: 'flex', alignItems: 'center', gap: '4px',
+                border: '1px solid var(--glass-border)'
               }}>
                 <motion.div animate={{ opacity: [0.4, 1, 0.4] }} transition={{ repeat: Infinity, duration: 1.5 }} style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--text-secondary)' }} />
                 <motion.div animate={{ opacity: [0.4, 1, 0.4] }} transition={{ repeat: Infinity, duration: 1.5, delay: 0.2 }} style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--text-secondary)' }} />
@@ -218,32 +227,18 @@ const ChatSidebar = () => {
         <div style={{ 
           padding: '20px', 
           borderTop: '1px solid var(--glass-border)',
-          background: 'rgba(10, 10, 11, 0.95)'
+          background: 'var(--nav-bg)'
         }}>
           {/* Quick Actions */}
           {messages.length === 1 && (
             <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', marginBottom: '12px', paddingBottom: '4px' }} className="no-scrollbar">
               <button 
-                onClick={() => handleSendMessage(null, "Analyze the market impact. List 3 specific public companies or industries affected by this news and explain why.")}
-                style={{ 
-                  background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(139, 92, 246, 0.3)',
-                  padding: '6px 12px', borderRadius: '16px', fontSize: '0.75rem', color: 'var(--accent-secondary)',
-                  whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer'
-                }}
-                onMouseOver={(e) => e.currentTarget.style.background = 'rgba(139, 92, 246, 0.1)'}
-                onMouseOut={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'}
-              >
-                📉 Analyze Market Impact
-              </button>
-              <button 
                 onClick={() => handleSendMessage(null, "Summarize this article in exactly 3 short bullet points.")}
                 style={{ 
-                  background: 'rgba(255,255,255,0.03)', border: '1px solid var(--glass-border)',
+                  background: 'var(--glass-bg)', border: '1px solid var(--glass-border)',
                   padding: '6px 12px', borderRadius: '16px', fontSize: '0.75rem', color: 'var(--text-secondary)',
                   whiteSpace: 'nowrap', cursor: 'pointer'
                 }}
-                onMouseOver={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
-                onMouseOut={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.03)'}
               >
                 📝 TL;DR Summary
               </button>
@@ -262,7 +257,7 @@ const ChatSidebar = () => {
                 padding: '12px 16px',
                 borderRadius: '24px',
                 border: '1px solid var(--glass-border)',
-                background: 'rgba(255, 255, 255, 0.05)',
+                background: 'var(--glass-bg)',
                 color: 'var(--text-primary)',
                 outline: 'none',
               }}

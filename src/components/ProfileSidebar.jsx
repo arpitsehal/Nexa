@@ -125,7 +125,7 @@ const ProfileSidebar = () => {
                         placeholder="e.g. https://techcrunch.com/feed/" 
                         value={newRss}
                         onChange={(e) => setNewRss(e.target.value)}
-                        style={{ flex: 1, width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1px solid var(--glass-border)', background: 'rgba(0,0,0,0.2)', color: 'white', outline: 'none', fontSize: '0.85rem' }}
+                        style={{ flex: 1, width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1px solid var(--glass-border)', background: 'rgba(0,0,0,0.1)', color: 'var(--text-primary)', outline: 'none', fontSize: '0.85rem' }}
                       />
                       <button onClick={handleAddRss} style={{ background: 'var(--accent-primary)', color: 'white', padding: '0 12px', borderRadius: '8px', display: 'flex', alignItems: 'center' }}>
                         <Plus size={16} />
@@ -151,6 +151,42 @@ const ProfileSidebar = () => {
                   </motion.div>
                 )}
               </AnimatePresence>
+
+              <div style={{ margin: '8px 0', height: '1px', background: 'var(--glass-border)' }} />
+              
+              <div style={{ padding: '8px 16px' }}>
+                <p style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '12px' }}>Settings</p>
+                <div style={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'space-between',
+                  background: 'rgba(255, 255, 255, 0.05)',
+                  padding: '8px 12px',
+                  borderRadius: '12px',
+                  border: '1px solid var(--glass-border)'
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    {theme === 'dark' ? <Moon size={18} color="var(--accent-secondary)" /> : <Sun size={18} color="var(--warning)" />}
+                    <span style={{ fontSize: '0.9rem', fontWeight: 500 }}>{theme === 'dark' ? 'Dark Mode' : 'Light Mode'}</span>
+                  </div>
+                  <button 
+                    onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                    style={{ 
+                      width: '44px', height: '24px', 
+                      background: theme === 'dark' ? 'var(--accent-primary)' : 'var(--text-muted)',
+                      borderRadius: '12px', position: 'relative', transition: 'all 0.3s'
+                    }}
+                  >
+                    <motion.div 
+                      animate={{ x: theme === 'dark' ? 20 : 2 }}
+                      style={{ 
+                        width: '20px', height: '20px', background: 'white', 
+                        borderRadius: '50%', position: 'absolute', top: 2
+                      }}
+                    />
+                  </button>
+                </div>
+              </div>
 
             </div>
 

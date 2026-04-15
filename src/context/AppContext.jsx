@@ -24,19 +24,9 @@ export const AppProvider = ({ children }) => {
 
   // State for Profile Sidebar
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-
   // Listen to Firebase Auth state and Firestore document
   useEffect(() => {
     let unsubscribeSnapshot = null;
-
-    // Handle Theme injection
-    localStorage.setItem('nexa-theme', theme);
-    if (theme === 'light') {
-      document.documentElement.classList.add('light-theme');
-    } else {
-      document.documentElement.classList.remove('light-theme');
-    }
-
     const unsubscribeAuth = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
       
@@ -94,6 +84,16 @@ export const AppProvider = ({ children }) => {
       if (unsubscribeSnapshot) unsubscribeSnapshot();
     };
   }, []);
+
+  // Theme Management Effect
+  useEffect(() => {
+    localStorage.setItem('nexa-theme', theme);
+    if (theme === 'light') {
+      document.documentElement.classList.add('light-theme');
+    } else {
+      document.documentElement.classList.remove('light-theme');
+    }
+  }, [theme]);
 
   const saveInterests = async (newInterests) => {
     // Optimistic UI update
