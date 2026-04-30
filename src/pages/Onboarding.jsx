@@ -41,7 +41,7 @@ const Onboarding = () => {
   const handleContinue = () => {
     if (localInterests.length > 0) {
       setInterests(localInterests);
-      navigate('/');
+      navigate('/feed');
     }
   };
 

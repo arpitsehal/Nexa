@@ -6,6 +6,7 @@ import Onboarding from './pages/Onboarding';
 import Feed from './pages/Feed';
 import Bookmarks from './pages/Bookmarks';
 import AdminDashboard from './pages/AdminDashboard';
+import LandingPage from './pages/LandingPage';
 import ChatSidebar from './components/ChatSidebar';
 import ProfileSidebar from './components/ProfileSidebar';
 import './index.css';
@@ -21,7 +22,7 @@ const ProtectedRoute = ({ children }) => {
     );
   }
   
-  if (!user) return <Navigate to="/login" replace />;
+  if (!user) return <Navigate to="/" replace />;
   return children;
 };
 
@@ -38,7 +39,7 @@ const AdminRoute = ({ children }) => {
   
   if (!user || !isAdmin) {
     console.warn("Unprivileged access attempt to admin panel");
-    return <Navigate to="/" replace />;
+    return <Navigate to="/feed" replace />;
   }
   
   return children;
@@ -53,7 +54,8 @@ function AppRoutes() {
           <Onboarding />
         </ProtectedRoute>
       } />
-      <Route path="/" element={
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/feed" element={
         <ProtectedRoute>
           <Feed />
         </ProtectedRoute>
