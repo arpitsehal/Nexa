@@ -136,9 +136,9 @@ const LandingPage = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <h1 className="hero-title">Your all-in-one platform for knowledge sharing</h1>
+          <h1 className="hero-title">Your personalized AI-powered newsroom</h1>
           <p className="hero-subtitle">
-            Redefining how teams discover, save, and discuss important content. A seamless experience from your feed to the analytics dashboard.
+            Redefining how you discover, save, and consume important content. A seamless experience from your tailored feed to deep AI analytics.
           </p>
           <div className="hero-actions">
             <button className="landing-btn-primary" onClick={() => navigate(user ? '/feed' : '/login')} style={{ padding: '1rem 2rem', fontSize: '1.1rem' }}>
