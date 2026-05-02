@@ -109,8 +109,7 @@ const ChatSidebar = () => {
           width: '100%',
           maxWidth: '400px',
           height: '100vh',
-          background: 'var(--nav-bg)',
-          backdropFilter: 'blur(20px)',
+          background: 'var(--bg-secondary)',
           borderLeft: '1px solid var(--glass-border)',
           zIndex: 1000,
           display: 'flex',
@@ -227,7 +226,7 @@ const ChatSidebar = () => {
         <div style={{ 
           padding: '20px', 
           borderTop: '1px solid var(--glass-border)',
-          background: 'var(--nav-bg)'
+          background: 'var(--bg-secondary)'
         }}>
           {/* Quick Actions */}
           {messages.length === 1 && (

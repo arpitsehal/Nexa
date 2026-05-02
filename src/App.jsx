@@ -8,7 +8,6 @@ import Bookmarks from './pages/Bookmarks';
 import AdminDashboard from './pages/AdminDashboard';
 import LandingPage from './pages/LandingPage';
 import ChatSidebar from './components/ChatSidebar';
-import ProfileSidebar from './components/ProfileSidebar';
 import './index.css';
 
 const ProtectedRoute = ({ children }) => {
@@ -80,7 +79,6 @@ function App() {
       <Router>
         <AppRoutes />
         <ChatSidebar />
-        <ProfileSidebar />
       </Router>
     </AppProvider>
   );
