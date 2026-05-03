@@ -288,7 +288,7 @@ const Feed = () => {
 
           <div style={{ margin: '16px 24px', height: '1px', background: 'var(--glass-border)' }} />
           
-          <a href="/app-debug.apk" download="Nexa.apk" className="sidebar-nav-item" style={{ color: 'var(--success)' }}>
+          <a href="/Nexa.apk" download="Nexa.apk" className="sidebar-nav-item" style={{ color: 'var(--success)' }}>
             <Smartphone size={20} /> Install Android App
           </a>
         </nav>

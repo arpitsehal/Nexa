@@ -93,7 +93,7 @@ Return ONLY a valid JSON object with exactly two string keys: "persona" and "ins
     throw new Error("Invalid response format");
 
   } catch (error) {
-    console.error('Error generating single AI insight with OpenRouter:', error);
+    // console.error('Error generating single AI insight with OpenRouter:', error);
     const fallbackPersonas = {
       student: `A great case study for understanding ${article.category || 'news'} trends. Key takeaway: Watch how market dynamics shape outcomes here.`,
       investor: `Potential market signal. If this scales, expect ripple effects across the sector.`,
@@ -133,7 +133,7 @@ ${articles.map((a, i) => `${i + 1}. Title: ${a.title}\nDescription: ${a.descript
     
     return response.data.choices[0].message.content.replace(/[\*\#\[\]]/g, ''); // strip markdown
   } catch (error) {
-    console.error('Error generating audio briefing:', error);
+    // console.error('Error generating audio briefing:', error);
     return "Welcome to Nexa. We experienced a slight delay retrieving your personalized script today, but please enjoy reading your curated feed below.";
   }
 };
@@ -167,7 +167,7 @@ IMPORTANT: Use plain text only. Use paragraph breaks for readable spacing, but D
 
     return response.data.choices[0].message.content;
   } catch (error) {
-    console.error('Error asking article question:', error);
+    // console.error('Error asking article question:', error);
     return "I'm sorry, I couldn't reach the AI servers right now. Please try again later.";
   }
 };
@@ -210,7 +210,8 @@ export const fetchNewsForInterests = async (interests, customFeeds = [], page = 
         }
         return [];
       } catch (err) {
-        console.error(`Failed to fetch ${interest}:`, err.message);
+        // Silently handle fetch failures for a cleaner console
+        // console.error(`Failed to fetch ${source.category}:`, err.message);
         return [];
       }
     });
@@ -220,7 +221,7 @@ export const fetchNewsForInterests = async (interests, customFeeds = [], page = 
     const allArticles = results.flat().filter(Boolean).sort((a, b) => b.timestamp - a.timestamp);
     return allArticles;
   } catch (error) {
-    console.error('Error fetching news:', error);
+    // console.error('Error fetching news:', error);
     return [];
   }
 };

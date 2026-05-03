@@ -4,6 +4,7 @@ import { AppContext } from '../context/AppContext';
 import { motion } from 'framer-motion';
 import { signInWithPopup } from 'firebase/auth';
 import { auth, googleProvider } from '../firebase';
+import loginBg from '../assets/login-bg.png';
 
 const Login = () => {
   const { user, authLoading, interests } = useContext(AppContext);
@@ -46,13 +47,11 @@ const Login = () => {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: '#f1f5f9',
-      backgroundImage: `
-        radial-gradient(circle at 15% 50%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
-        radial-gradient(rgba(15, 23, 42, 0.15) 1.5px, transparent 1.5px)
-      `,
-      backgroundSize: '100% 100%, 100% 100%, 28px 28px',
+      backgroundColor: '#0f172a', // Dark fallback
+      backgroundImage: `linear-gradient(rgba(15, 23, 42, 0.4), rgba(15, 23, 42, 0.4)), url(${loginBg})`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
       padding: '20px'
     }}>
       <motion.div

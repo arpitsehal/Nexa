@@ -37,7 +37,6 @@ const AdminRoute = ({ children }) => {
   }
   
   if (!user || !isAdmin) {
-    console.warn("Unprivileged access attempt to admin panel");
     return <Navigate to="/feed" replace />;
   }
   
