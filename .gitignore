@@ -40,3 +40,6 @@ dist/
 
 # Firebase Admin Key
 serviceAccountKey.json
+
+# Claws local orchestration state
+.claws/
