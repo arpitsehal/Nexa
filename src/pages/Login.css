@@ -1,0 +1,232 @@
+/* ============================================================================
+   Nexa login — built on the landing page tokens (.pn in LandingPage.css):
+   off-white form column on the left, dark showcase panel on the right.
+   ========================================================================= */
+
+.pn-login {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: clamp(8px, 1vw, 16px);
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: clamp(8px, 1vw, 16px);
+}
+
+.pn-login-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  color: var(--ink-70);
+  font-weight: 500;
+}
+
+/* --------------------------------- form ----------------------------------- */
+
+.pn-login-form {
+  display: flex;
+  flex-direction: column;
+  padding: clamp(0.5rem, 2vw, 1.5rem) clamp(0.5rem, 4vw, 3.5rem);
+}
+
+.pn-login-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  height: 64px;
+}
+
+.pn-login-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #fff;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+.pn .pn-login-back:hover {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: #fff;
+}
+
+.pn-login-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: 1;
+  max-width: 560px;
+  padding-block: clamp(2.5rem, 8vh, 5rem);
+}
+
+.pn-login-title {
+  margin-top: 1.2rem;
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: clamp(2.8rem, 6vw, 5.4rem);
+  line-height: 0.98;
+  letter-spacing: -0.05em;
+}
+
+.pn-accent {
+  color: var(--accent);
+}
+
+.pn-login-actions {
+  margin-top: 2.4rem;
+}
+
+.pn-login-google {
+  padding-left: 0.45rem;
+}
+
+.pn-login-google:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.pn-login-g {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.pn-login-perks {
+  list-style: none;
+  display: grid;
+  gap: 0.8rem;
+  margin: 2.6rem 0 0;
+  padding: 1.6rem 0 0;
+  border-top: 1px solid var(--line);
+}
+
+.pn-login-perks li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 500;
+  color: var(--ink-70);
+}
+
+.pn-login-perk-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: var(--soft);
+  color: var(--accent);
+}
+
+.pn-login-legal {
+  font-size: 0.85rem;
+  color: var(--ink-50);
+}
+
+/* ------------------------------- showcase --------------------------------- */
+
+.pn-login-showcase {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  border-radius: clamp(24px, 3vw, 40px);
+  background: var(--dark);
+  color: #fff;
+  isolation: isolate;
+}
+
+.pn-login-showcase .pn-showcase-glow {
+  z-index: -1;
+}
+
+.pn-login-quote {
+  padding: clamp(5rem, 12vh, 7rem) clamp(1.5rem, 4vw, 3.5rem) 0;
+}
+
+.pn-login-quote p {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: clamp(2rem, 3.6vw, 3.6rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.pn-login-quote p span {
+  color: var(--accent);
+}
+
+.pn-login-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 2.5rem;
+  margin-top: 2rem;
+}
+
+.pn-login-stats strong {
+  display: block;
+  font-family: var(--display);
+  font-size: 2rem;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+}
+
+.pn-login-stats span {
+  font-size: 0.9rem;
+  color: var(--light-40);
+}
+
+.pn-login-mockup {
+  width: 88%;
+  margin: 2.5rem 0 0 auto;
+  border-radius: 16px 0 0 0;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+}
+
+/* ------------------------------ responsive -------------------------------- */
+
+@media (max-width: 900px) {
+  .pn-login {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pn-login-form {
+    padding-inline: 0.5rem;
+  }
+
+  .pn-login-body {
+    padding-block: 2rem 2.5rem;
+  }
+
+  .pn-login-legal {
+    margin-bottom: 1rem;
+  }
+
+  /* on small screens the sign-in is the whole job; the showcase only adds scroll */
+  .pn-login-showcase {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .pn-login-google {
+    width: 100%;
+    justify-content: space-between;
+    font-size: 0.95rem;
+  }
+
+  .pn-login-back {
+    padding: 0.5rem 0.8rem;
+  }
+}
