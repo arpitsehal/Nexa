@@ -4,144 +4,227 @@ import { AppContext } from '../context/AppContext';
 import {
   motion,
   AnimatePresence,
-  useMotionValue,
-  useSpring,
-  useTransform,
   useInView,
   useReducedMotion,
   useScroll,
+  useTransform,
 } from 'framer-motion';
 import {
-  CheckCircle2,
-  Users,
-  BarChart3,
-  Smartphone,
-  ShieldCheck,
-  Zap,
-  ChevronDown,
-  Globe,
-  Headphones,
-  Bot,
-  Sparkles,
   ArrowRight,
+  ArrowUpRight,
+  Plus,
   Menu,
   X,
   Mail,
+  Download,
+  Rss,
+  Bookmark,
+  BarChart3,
+  Smartphone,
+  Headphones,
+  Bot,
+  Star,
 } from 'lucide-react';
 import './LandingPage.css';
 import aboutMockup from '../assets/about-mockup.png';
 import adminMockup from '../assets/admin-mockup.png';
+import heroMockup from '../assets/hero-mockup.png';
 
 /* ---------------------------------- data --------------------------------- */
 
+const NAV_LINKS = [
+  { href: '#services', label: 'Features' },
+  { href: '#process', label: 'How it works' },
+  { href: '#about', label: 'About' },
+  { href: '#faq', label: 'FAQ' },
+];
+
+const TOPICS = [
+  'World',
+  'Technology',
+  'Markets',
+  'Science',
+  'Startups',
+  'Politics',
+  'Climate',
+  'Sports',
+  'Health',
+  'AI & Research',
+  'Culture',
+  'Space',
+];
+
+const STATS = [
+  { value: 30, suffix: 'K+', label: 'Active readers' },
+  { value: 2.1, suffix: 'M', decimals: 1, label: 'Articles read' },
+  { value: 98, suffix: '%', label: 'Reader satisfaction' },
+  { value: 24, suffix: '/7', label: 'Live feed updates' },
+];
+
 const FEATURES = [
   {
-    icon: Users,
-    title: 'Real-time Feed',
+    icon: Rss,
+    title: 'Real-time feed',
     description:
-      'Stay updated with a curated feed of news, articles, and discussions happening right now.',
+      'A curated stream of news, articles, and discussions happening right now — tuned to what you care about.',
   },
   {
-    icon: CheckCircle2,
-    title: 'Smart Bookmarks',
+    icon: Bookmark,
+    title: 'Smart bookmarks',
     description:
-      'Save important articles and resources for later reading with our intelligent bookmarking system.',
-  },
-  {
-    icon: BarChart3,
-    title: 'Admin Analytics',
-    description:
-      'Powerful dashboard and reporting tools to understand user engagement and platform growth.',
-  },
-  {
-    icon: Smartphone,
-    title: 'Mobile Optimized',
-    description:
-      'Access your feed and manage your workflow anywhere with our fully responsive mobile design.',
-  },
-  {
-    icon: Headphones,
-    title: 'Listen to News',
-    description:
-      'Listen to the latest news on the go with our integrated text-to-speech audio player.',
+      'Save important stories and resources for later with an intelligent bookmarking system.',
   },
   {
     icon: Bot,
     title: 'Ask AI',
     description:
-      'Get instant summaries and context on any article by asking our intelligent AI assistant.',
+      'Instant summaries and context on any article from a built-in AI assistant.',
+  },
+  {
+    icon: Headphones,
+    title: 'Listen to news',
+    description:
+      'Catch up on the go with an integrated text-to-speech audio player.',
+  },
+  {
+    icon: BarChart3,
+    title: 'Admin analytics',
+    description:
+      'Dashboards and reporting that show engagement, readers, and platform growth.',
+  },
+  {
+    icon: Smartphone,
+    title: 'Mobile ready',
+    description:
+      'Fully responsive on the web, plus a native Android app for reading anywhere.',
   },
 ];
 
-const STATS = [
-  { value: 30, suffix: 'K+', label: 'Active Users' },
-  { value: 2.1, suffix: 'M', decimals: 1, label: 'Articles Read' },
-  { value: 98, suffix: '%', label: 'Satisfaction' },
+const STEPS = [
+  {
+    key: 'discover',
+    title: 'Discover',
+    lead: 'Pick your interests once.',
+    body:
+      'Choose the topics you follow and Nexa builds a daily intel feed around your profile, filtering out the noise before it reaches you.',
+    points: ['Interest-based curation', 'Live updates every minute', 'Zero clutter'],
+    image: heroMockup,
+  },
+  {
+    key: 'save',
+    title: 'Save',
+    lead: 'Keep what matters.',
+    body:
+      'Bookmark stories in one tap and come back to them from any device. Your reading list stays in sync everywhere.',
+    points: ['One-tap bookmarks', 'Synced across devices', 'Organised reading list'],
+    image: aboutMockup,
+  },
+  {
+    key: 'understand',
+    title: 'Understand',
+    lead: 'Go deeper with AI.',
+    body:
+      'Ask the assistant for a summary, background, or the other side of a story, or listen to it read aloud while you commute.',
+    points: ['AI summaries & context', 'Text-to-speech player', 'Follow-up questions'],
+    image: aboutMockup,
+  },
+  {
+    key: 'measure',
+    title: 'Measure',
+    lead: 'See the whole picture.',
+    body:
+      'Nexa Intelligence gives admins real-time data on engagement, registered readers, and platform activity.',
+    points: ['Engagement analytics', 'Reader growth', 'Live activity'],
+    image: adminMockup,
+  },
 ];
 
 const FAQS = [
   {
     question: 'How does Nexa personalize my news feed?',
     answer:
-      'Nexa uses advanced AI algorithms and your selected interests to curate a daily intel feed specifically tailored to your unique profile, ensuring you only see the news that matters most to you.',
+      'Nexa uses AI and your selected interests to curate a daily intel feed tailored to your profile, so you only see the news that matters most to you.',
   },
   {
     question: 'Do I need to download an app?',
     answer:
-      'Our platform is fully web-based and highly responsive, meaning you can access it from any browser on desktop, tablet, or mobile without needing to download a separate app.',
+      'No. Nexa is fully web-based and responsive, so it works in any browser on desktop, tablet, or mobile. If you prefer a native experience, an Android app is also available.',
   },
   {
     question: 'How secure is my data?',
     answer:
-      'We use enterprise-grade encryption and partner with industry leaders like Google Firebase to ensure your data is stored securely and compliantly.',
+      'We use enterprise-grade encryption and Google Firebase to make sure your data is stored securely and compliantly.',
   },
   {
     question: 'What does Nexa Intelligence provide?',
     answer:
-      'Nexa Intelligence is our powerful admin analytics dashboard that provides real-time data on user engagement, registered readers, and platform activity.',
+      'Nexa Intelligence is the admin analytics dashboard, with real-time data on user engagement, registered readers, and platform activity.',
   },
 ];
 
-const NAV_LINKS = [
-  { href: '#features', label: 'Features' },
-  { href: '#about', label: 'About' },
-  { href: '#faq', label: 'FAQ' },
-  { href: '#contact', label: 'Contact' },
-];
+const EASE = [0.22, 1, 0.36, 1];
 
 /* -------------------------------- primitives ------------------------------ */
 
 /** Fades + lifts its children into view once they enter the viewport. */
-const Reveal = ({ children, delay = 0, y = 28, className = '', ...rest }) => {
+const Reveal = ({ children, delay = 0, y = 32, className = '', as = 'div', ...rest }) => {
   const reduced = useReducedMotion();
+  const Tag = motion[as];
 
   return (
-    <motion.div
+    <Tag
       className={className}
       initial={reduced ? { opacity: 0 } : { opacity: 0, y }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-80px' }}
-      transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.8, delay, ease: EASE }}
       {...rest}
     >
       {children}
-    </motion.div>
+    </Tag>
   );
 };
 
-/** Tracks the pointer inside a card so CSS can draw a glow that follows it. */
-const useSpotlight = () => {
-  const ref = useRef(null);
-
-  const onMouseMove = (e) => {
-    const el = ref.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    el.style.setProperty('--mx', `${e.clientX - rect.left}px`);
-    el.style.setProperty('--my', `${e.clientY - rect.top}px`);
+/** Headline whose words slide up out of a mask, one after another. */
+const SplitHeading = ({ text, className = '', delay = 0, as = 'h2', accent }) => {
+  const reduced = useReducedMotion();
+  const Tag = motion[as];
+  const words = text.split(' ');
+  const wordVariants = {
+    hidden: reduced ? { opacity: 0 } : { y: '110%' },
+    shown: (i) => ({
+      ...(reduced ? { opacity: 1 } : { y: '0%' }),
+      transition: { duration: 0.9, delay: delay + i * 0.06, ease: EASE },
+    }),
   };
 
-  return { ref, onMouseMove };
+  // The in-view trigger lives on the heading, not the words: each word starts
+  // translated outside its overflow mask, so an observer on it would never fire.
+  return (
+    <Tag
+      className={className}
+      aria-label={text}
+      initial="hidden"
+      whileInView="shown"
+      viewport={{ once: true, margin: '-40px' }}
+    >
+      {words.map((word, i) => (
+        // The space sits outside the inline-block mask, where it would be trimmed.
+        <React.Fragment key={`${word}-${i}`}>
+          <span className="word-mask" aria-hidden="true">
+            <motion.span
+              className={`word ${accent === word ? 'accent' : ''}`}
+              variants={wordVariants}
+              custom={i}
+            >
+              {word}
+            </motion.span>
+          </span>
+          {i < words.length - 1 && ' '}
+        </React.Fragment>
+      ))}
+    </Tag>
+  );
 };
 
 /** Counts from 0 to `value` the first time it scrolls into view. */
@@ -177,24 +260,32 @@ const CountUp = ({ value, decimals = 0, suffix = '' }) => {
   return (
     <span ref={ref}>
       {shown.toFixed(decimals)}
-      {suffix}
+      <span className="stat-suffix">{suffix}</span>
     </span>
   );
 };
 
-/* --------------------------------- sections ------------------------------- */
-
-const AuroraBackdrop = () => (
-  <div className="aurora" aria-hidden="true">
-    <span className="aurora-blob aurora-blob-1" />
-    <span className="aurora-blob aurora-blob-2" />
-    <span className="aurora-blob aurora-blob-3" />
-    <div className="aurora-grid" />
-    <div className="aurora-vignette" />
+/** Infinite horizontal ticker. Content is rendered twice so the loop is seamless. */
+const Marquee = ({ items, reverse = false, dark = false }) => (
+  <div className={`marquee ${dark ? 'marquee-dark' : ''}`} aria-hidden="true">
+    <div className={`marquee-track ${reverse ? 'is-reverse' : ''}`}>
+      {[0, 1].map((copy) => (
+        <div className="marquee-group" key={copy}>
+          {items.map((item) => (
+            <span className="marquee-item" key={`${copy}-${item}`}>
+              {item}
+              <span className="marquee-star">✦</span>
+            </span>
+          ))}
+        </div>
+      ))}
+    </div>
   </div>
 );
 
-const Navbar = ({ user, navigate }) => {
+/* --------------------------------- sections ------------------------------- */
+
+const Navbar = ({ user, go }) => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -205,46 +296,55 @@ const Navbar = ({ user, navigate }) => {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const go = () => navigate(user ? '/feed' : '/login');
-
   return (
-    <motion.nav
-      className={`landing-nav ${scrolled ? 'is-scrolled' : ''}`}
+    <motion.header
+      className={`pn-nav ${scrolled ? 'is-scrolled' : ''}`}
       initial={{ y: -80, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.7, ease: EASE }}
     >
-      <a href="/" className="landing-logo">
-        <img src="/Nexa.png" alt="" className="landing-logo-mark" />
-        <span>Nexa</span>
-      </a>
+      <div className="pn-nav-inner">
+        <a href="/" className="pn-logo">
+          <img src="/Nexa.png" alt="" />
+          <span>Nexa</span>
+        </a>
 
-      <div className="landing-nav-links">
-        {NAV_LINKS.map((link) => (
-          <a key={link.href} href={link.href}>
-            {link.label}
-          </a>
-        ))}
-      </div>
+        <nav className="pn-nav-links" aria-label="Primary">
+          {NAV_LINKS.map((link) => (
+            <a key={link.href} href={link.href}>
+              {link.label}
+            </a>
+          ))}
+        </nav>
 
-      <div className="landing-nav-actions">
-        <button className="btn btn-primary" onClick={go}>
-          {user ? 'Go to Newsroom' : 'Get Started'}
-          <ArrowRight size={16} />
-        </button>
-        <button
-          className="nav-toggle"
-          onClick={() => setMenuOpen((v) => !v)}
-          aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-        >
-          {menuOpen ? <X size={22} /> : <Menu size={22} />}
-        </button>
+        <div className="pn-nav-actions">
+          {!user && (
+            <button className="pn-link-btn" onClick={go}>
+              Log in
+            </button>
+          )}
+          <button className="pn-btn pn-btn-dark" onClick={go}>
+            {user ? 'Open newsroom' : "Let's start"}
+            <span className="pn-btn-icon">
+              <ArrowUpRight size={16} />
+            </span>
+          </button>
+          <button
+            className="pn-nav-toggle"
+            onClick={() => setMenuOpen((v) => !v)}
+            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={menuOpen}
+          >
+            {menuOpen ? <X size={22} /> : <Menu size={22} />}
+          </button>
+        </div>
       </div>
 
       <AnimatePresence>
         {menuOpen && (
-          <motion.div
-            className="nav-drawer"
+          <motion.nav
+            className="pn-drawer"
+            aria-label="Mobile"
             initial={{ opacity: 0, y: -12 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -12 }}
@@ -253,109 +353,436 @@ const Navbar = ({ user, navigate }) => {
             {NAV_LINKS.map((link) => (
               <a key={link.href} href={link.href} onClick={() => setMenuOpen(false)}>
                 {link.label}
+                <ArrowRight size={18} />
               </a>
             ))}
-          </motion.div>
+          </motion.nav>
         )}
       </AnimatePresence>
-    </motion.nav>
+    </motion.header>
   );
 };
 
-const HeroMockup = ({ src }) => {
+const Hero = ({ user, go }) => {
   const reduced = useReducedMotion();
-  const wrapRef = useRef(null);
-
-  const mx = useMotionValue(0);
-  const my = useMotionValue(0);
-  const rotateX = useSpring(useTransform(my, [-0.5, 0.5], [8, -8]), {
-    stiffness: 140,
-    damping: 18,
+  const mediaRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: mediaRef,
+    offset: ['start end', 'end start'],
   });
-  const rotateY = useSpring(useTransform(mx, [-0.5, 0.5], [-10, 10]), {
-    stiffness: 140,
-    damping: 18,
-  });
-
-  const onMouseMove = (e) => {
-    if (reduced) return;
-    const rect = wrapRef.current.getBoundingClientRect();
-    mx.set((e.clientX - rect.left) / rect.width - 0.5);
-    my.set((e.clientY - rect.top) / rect.height - 0.5);
-  };
-
-  const onMouseLeave = () => {
-    mx.set(0);
-    my.set(0);
-  };
+  // The showcase card opens up from a slightly inset, scaled-down state as it scrolls in.
+  const scale = useTransform(scrollYProgress, [0, 0.45], [0.9, 1]);
+  const imgY = useTransform(scrollYProgress, [0, 1], ['-6%', '6%']);
 
   return (
-    <motion.div
-      className="hero-mockup-stage"
-      ref={wrapRef}
-      onMouseMove={onMouseMove}
-      onMouseLeave={onMouseLeave}
-      initial={{ opacity: 0, y: 60, scale: 0.96 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ duration: 1, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
-    >
-      <motion.div
-        className="hero-mockup-frame"
-        style={reduced ? undefined : { rotateX, rotateY }}
-      >
-        <div className="hero-mockup-glow" aria-hidden="true" />
-        <img src={src} alt="Nexa newsroom dashboard preview" />
-        <div className="hero-mockup-sheen" aria-hidden="true" />
-      </motion.div>
-      <div className="hero-mockup-reflection" aria-hidden="true" />
-    </motion.div>
-  );
-};
-
-const FeatureCard = ({ feature, index }) => {
-  const { ref, onMouseMove } = useSpotlight();
-  const Icon = feature.icon;
-
-  return (
-    <Reveal delay={index * 0.08}>
-      <article className="feature-card" ref={ref} onMouseMove={onMouseMove}>
-        <div className="feature-card-spot" aria-hidden="true" />
-        <div className="feature-icon">
-          <Icon size={22} />
-        </div>
-        <h3>{feature.title}</h3>
-        <p>{feature.description}</p>
-      </article>
-    </Reveal>
-  );
-};
-
-const FAQItem = ({ question, answer, isOpen, onToggle }) => (
-  <div className={`faq-item ${isOpen ? 'is-open' : ''}`}>
-    <button className="faq-question" onClick={onToggle} aria-expanded={isOpen}>
-      <span>{question}</span>
-      <motion.span
-        className="faq-chevron"
-        animate={{ rotate: isOpen ? 180 : 0 }}
-        transition={{ duration: 0.3 }}
-      >
-        <ChevronDown size={18} />
-      </motion.span>
-    </button>
-    <AnimatePresence initial={false}>
-      {isOpen && (
+    <section className="pn-hero">
+      <div className="pn-container">
         <motion.div
-          initial={{ height: 0, opacity: 0 }}
-          animate={{ height: 'auto', opacity: 1 }}
-          exit={{ height: 0, opacity: 0 }}
-          transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
-          style={{ overflow: 'hidden' }}
+          className="pn-hero-rating"
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
         >
-          <p className="faq-answer">{answer}</p>
+          <span className="pn-stars" aria-hidden="true">
+            {[0, 1, 2, 3, 4].map((i) => (
+              <Star key={i} size={14} fill="currentColor" />
+            ))}
+          </span>
+          Loved by 30K+ readers
         </motion.div>
-      )}
-    </AnimatePresence>
-  </div>
+
+        <SplitHeading
+          as="h1"
+          className="pn-hero-title"
+          text="AI-Powered News, Curated For You"
+          accent="You"
+          delay={0.15}
+        />
+
+        <div className="pn-hero-bottom">
+          <motion.p
+            className="pn-hero-sub"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.5, ease: EASE }}
+          >
+            Nexa is your personal newsroom. Discover, save, listen to, and understand the
+            stories that matter — without the noise.
+          </motion.p>
+
+          <motion.div
+            className="pn-hero-actions"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6, ease: EASE }}
+          >
+            <button className="pn-btn pn-btn-accent pn-btn-lg" onClick={go}>
+              {user ? 'Open newsroom' : 'Get started free'}
+              <span className="pn-btn-icon">
+                <ArrowUpRight size={18} />
+              </span>
+            </button>
+            <a className="pn-btn pn-btn-outline pn-btn-lg" href="/Nexa.apk" download>
+              <Download size={18} />
+              Android app
+            </a>
+          </motion.div>
+        </div>
+      </div>
+
+      <div className="pn-container">
+        <motion.div
+          ref={mediaRef}
+          className="pn-showcase"
+          style={reduced ? undefined : { scale }}
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.5, ease: EASE }}
+        >
+          <div className="pn-showcase-glow" aria-hidden="true" />
+          <motion.img
+            src={aboutMockup}
+            alt="Nexa newsroom dashboard preview"
+            style={reduced ? undefined : { y: imgY }}
+          />
+          <div className="pn-showcase-tag">
+            <span className="pn-live-dot" /> Live feed
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+};
+
+const Stats = () => (
+  <section className="pn-section pn-stats-section">
+    <div className="pn-container">
+      <div className="pn-section-head pn-split">
+        <Reveal>
+          <span className="pn-eyebrow">(01) By the numbers</span>
+        </Reveal>
+        <SplitHeading
+          className="pn-h2"
+          text="A newsroom people actually return to"
+          accent="return"
+        />
+      </div>
+
+      <div className="pn-stats">
+        {STATS.map((stat, i) => (
+          <Reveal key={stat.label} className="pn-stat" delay={i * 0.08}>
+            <div className="pn-stat-value">
+              <CountUp value={stat.value} decimals={stat.decimals} suffix={stat.suffix} />
+            </div>
+            <p>{stat.label}</p>
+          </Reveal>
+        ))}
+      </div>
+    </div>
+  </section>
+);
+
+const Services = () => (
+  <section id="services" className="pn-section">
+    <div className="pn-container">
+      <div className="pn-section-head pn-split">
+        <Reveal>
+          <span className="pn-eyebrow">(02) Features</span>
+        </Reveal>
+        <div>
+          <SplitHeading
+            className="pn-h2"
+            text="Everything you need to stay informed"
+            accent="informed"
+          />
+          <Reveal as="p" className="pn-lead" delay={0.2}>
+            Powerful tools to source, track, and engage with content — designed so the
+            complexity stays under the hood.
+          </Reveal>
+        </div>
+      </div>
+
+      <div className="pn-services">
+        {FEATURES.map((feature, i) => {
+          const Icon = feature.icon;
+          return (
+            <Reveal key={feature.title} delay={(i % 3) * 0.08}>
+              <article className="pn-service">
+                <div className="pn-service-top">
+                  <span className="pn-service-index">{String(i + 1).padStart(2, '0')}</span>
+                  <span className="pn-service-icon">
+                    <Icon size={22} />
+                  </span>
+                </div>
+                <h3>{feature.title}</h3>
+                <p>{feature.description}</p>
+                <span className="pn-service-arrow" aria-hidden="true">
+                  <ArrowUpRight size={20} />
+                </span>
+              </article>
+            </Reveal>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+);
+
+const Process = () => {
+  const [active, setActive] = useState(0);
+  const step = STEPS[active];
+
+  return (
+    <section id="process" className="pn-section pn-dark">
+      <div className="pn-container">
+        <div className="pn-section-head pn-split">
+          <Reveal>
+            <span className="pn-eyebrow">(03) How it works</span>
+          </Reveal>
+          <SplitHeading
+            className="pn-h2"
+            text="From headline to insight in four steps"
+            accent="insight"
+          />
+        </div>
+
+        <div className="pn-tabs" role="tablist" aria-label="How Nexa works">
+          {STEPS.map((s, i) => (
+            <button
+              key={s.key}
+              role="tab"
+              id={`tab-${s.key}`}
+              aria-selected={active === i}
+              aria-controls={`panel-${s.key}`}
+              className={`pn-tab ${active === i ? 'is-active' : ''}`}
+              onClick={() => setActive(i)}
+            >
+              <span className="pn-tab-num">0{i + 1}</span>
+              {s.title}
+              {active === i && (
+                <motion.span className="pn-tab-pill" layoutId="tab-pill" transition={{ duration: 0.45, ease: EASE }} />
+              )}
+            </button>
+          ))}
+        </div>
+
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={step.key}
+            id={`panel-${step.key}`}
+            role="tabpanel"
+            aria-labelledby={`tab-${step.key}`}
+            className="pn-panel"
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -16 }}
+            transition={{ duration: 0.45, ease: EASE }}
+          >
+            <div className="pn-panel-copy">
+              <h3>{step.lead}</h3>
+              <p>{step.body}</p>
+              <ul>
+                {step.points.map((point) => (
+                  <li key={point}>
+                    <span className="pn-check" aria-hidden="true" />
+                    {point}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="pn-panel-media">
+              <img src={step.image} alt={`${step.title} in Nexa`} />
+            </div>
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      <Marquee items={TOPICS} dark reverse />
+    </section>
+  );
+};
+
+const About = () => (
+  <section id="about" className="pn-section">
+    <div className="pn-container pn-about">
+      <div className="pn-about-copy">
+        <Reveal>
+          <span className="pn-eyebrow">(04) About us</span>
+        </Reveal>
+        <SplitHeading
+          className="pn-h2"
+          text="We solve real problems, not just add features"
+          accent="problems,"
+        />
+        <Reveal as="p" className="pn-lead" delay={0.15}>
+          Most platforms are full of features you'll never use. We focus on what actually
+          moves the needle: better discovery, less noise, real productivity gains.
+        </Reveal>
+        <Reveal as="p" className="pn-lead" delay={0.22}>
+          Great design hides the complexity, so the product feels easy because we've done
+          the hard work underneath.
+        </Reveal>
+        <Reveal className="pn-about-points" delay={0.3}>
+          <div>
+            <strong>Firebase</strong>
+            <span>Secure by default</span>
+          </div>
+          <div>
+            <strong>Gemini AI</strong>
+            <span>Summaries & context</span>
+          </div>
+          <div>
+            <strong>Web + Android</strong>
+            <span>Read anywhere</span>
+          </div>
+        </Reveal>
+      </div>
+
+      <Reveal className="pn-about-media" delay={0.1}>
+        <img src={adminMockup} alt="Nexa admin analytics dashboard" />
+        <div className="pn-about-badge">
+          <span className="pn-about-badge-num">98%</span>
+          <span>of readers would recommend Nexa</span>
+        </div>
+      </Reveal>
+    </div>
+  </section>
+);
+
+const FAQ = () => {
+  const [open, setOpen] = useState(0);
+
+  return (
+    <section id="faq" className="pn-section pn-muted">
+      <div className="pn-container pn-faq">
+        <div className="pn-faq-head">
+          <Reveal>
+            <span className="pn-eyebrow">(05) FAQ</span>
+          </Reveal>
+          <SplitHeading className="pn-h2" text="Questions, answered" accent="answered" />
+          <Reveal as="p" className="pn-lead" delay={0.15}>
+            Can't find what you're looking for? Write to us and we'll get back to you.
+          </Reveal>
+        </div>
+
+        <div className="pn-faq-list">
+          {FAQS.map((faq, i) => {
+            const isOpen = open === i;
+            return (
+              <Reveal key={faq.question} delay={i * 0.06}>
+                <div className={`pn-faq-item ${isOpen ? 'is-open' : ''}`}>
+                  <button
+                    className="pn-faq-q"
+                    onClick={() => setOpen(isOpen ? null : i)}
+                    aria-expanded={isOpen}
+                  >
+                    <span>{faq.question}</span>
+                    <span className="pn-faq-icon" aria-hidden="true">
+                      <Plus size={18} />
+                    </span>
+                  </button>
+                  <AnimatePresence initial={false}>
+                    {isOpen && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.35, ease: EASE }}
+                        style={{ overflow: 'hidden' }}
+                      >
+                        <p className="pn-faq-a">{faq.answer}</p>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </Reveal>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const CTA = ({ user, go }) => (
+  <section id="contact" className="pn-section">
+    <div className="pn-container">
+      <Reveal className="pn-cta">
+        <div className="pn-cta-glow" aria-hidden="true" />
+        <span className="pn-eyebrow pn-eyebrow-light">Ready when you are</span>
+        <SplitHeading
+          className="pn-cta-title"
+          text="Let's cut through the noise"
+          accent="noise"
+        />
+        <p>Join thousands of readers who get exactly the news they care about — nothing more.</p>
+        <div className="pn-cta-actions">
+          <button className="pn-btn pn-btn-accent pn-btn-lg" onClick={go}>
+            {user ? 'Open newsroom' : 'Get started free'}
+            <span className="pn-btn-icon">
+              <ArrowUpRight size={18} />
+            </span>
+          </button>
+          <a className="pn-cta-mail" href="mailto:2005sehalarpit@gmail.com">
+            <Mail size={17} />
+            2005sehalarpit@gmail.com
+          </a>
+        </div>
+      </Reveal>
+    </div>
+  </section>
+);
+
+const Footer = () => (
+  <footer className="pn-footer">
+    <div className="pn-container">
+      <div className="pn-footer-grid">
+        <div className="pn-footer-brand">
+          <a href="/" className="pn-logo pn-logo-light">
+            <img src="/Nexa.png" alt="" />
+            <span>Nexa</span>
+          </a>
+          <p>Your personal AI-powered newsroom.</p>
+        </div>
+
+        <div className="pn-footer-col">
+          <h4>Product</h4>
+          <ul>
+            <li><a href="#services">Features</a></li>
+            <li><a href="#process">How it works</a></li>
+            <li><a href="/Nexa.apk" download>Android app</a></li>
+          </ul>
+        </div>
+
+        <div className="pn-footer-col">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="#about">About us</a></li>
+            <li><a href="#faq">FAQ</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+
+        <div className="pn-footer-col">
+          <h4>Legal</h4>
+          <ul>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+            <li><a href="#">Cookie Policy</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div className="pn-footer-word" aria-hidden="true">
+        Nexa<span>.</span>
+      </div>
+
+      <div className="pn-footer-bottom">
+        <span>© {new Date().getFullYear()} Nexa Technology. All rights reserved.</span>
+        <a href="#top">Back to top ↑</a>
+      </div>
+    </div>
+  </footer>
 );
 
 /* ---------------------------------- page ---------------------------------- */
@@ -363,231 +790,22 @@ const FAQItem = ({ question, answer, isOpen, onToggle }) => (
 const LandingPage = () => {
   const navigate = useNavigate();
   const { user } = useContext(AppContext);
-  const [openFaq, setOpenFaq] = useState(null);
-  const { scrollYProgress } = useScroll();
-  const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 30, mass: 0.3 });
-
   const go = () => navigate(user ? '/feed' : '/login');
 
   return (
-    <div className="landing">
-      <motion.div className="scroll-progress" style={{ scaleX: progress }} aria-hidden="true" />
-      <AuroraBackdrop />
-      <Navbar user={user} navigate={navigate} />
-
-      {/* Hero */}
-      <section className="hero">
-        <motion.div
-          className="hero-badge"
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.05 }}
-        >
-          <Sparkles size={14} />
-          AI-curated intel, updated every minute
-        </motion.div>
-
-        <motion.h1
-          className="hero-title"
-          initial={{ opacity: 0, y: 26 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.75, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
-        >
-          Your personalized
-          <br />
-          AI-powered <span className="shine">newsroom</span>
-        </motion.h1>
-
-        <motion.p
-          className="hero-subtitle"
-          initial={{ opacity: 0, y: 22 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.75, delay: 0.22 }}
-        >
-          Redefining how you discover, save, and consume important content — a seamless
-          experience from your tailored feed to deep AI analytics.
-        </motion.p>
-
-        <motion.div
-          className="hero-actions"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.75, delay: 0.3 }}
-        >
-          <button className="btn btn-primary btn-lg" onClick={go}>
-            {user ? 'Go to Newsroom' : 'Sign up free'}
-            <ArrowRight size={18} />
-          </button>
-          <button
-            className="btn btn-ghost btn-lg"
-            onClick={() =>
-              document.getElementById('features').scrollIntoView({ behavior: 'smooth' })
-            }
-          >
-            See features
-          </button>
-        </motion.div>
-
-        <motion.ul
-          className="hero-trust"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.45 }}
-        >
-          <li>
-            <ShieldCheck size={15} /> Enterprise-grade security
-          </li>
-          <li>
-            <Zap size={15} /> Real-time updates
-          </li>
-          <li>
-            <Globe size={15} /> Works on every device
-          </li>
-        </motion.ul>
-
-        <HeroMockup src={aboutMockup} />
-      </section>
-
-      {/* Features */}
-      <section id="features" className="section">
-        <Reveal className="section-header">
-          <span className="eyebrow">Features</span>
-          <h2>
-            Powerful tools. <span className="muted-grad">Incredible results.</span>
-          </h2>
-          <p>Everything you need to source, track, and engage with content effortlessly.</p>
-        </Reveal>
-
-        <div className="features-grid">
-          {FEATURES.map((feature, idx) => (
-            <FeatureCard key={feature.title} feature={feature} index={idx} />
-          ))}
-        </div>
-      </section>
-
-      {/* About */}
-      <section id="about" className="section about">
-        <Reveal className="about-copy">
-          <span className="eyebrow">About us</span>
-          <h2>We solve real problems, not just add features</h2>
-          <p>
-            Most platforms are full of features you'll never use. We focus on the stuff that
-            actually moves the needle. Better discovery. Less noise. Real productivity gains.
-          </p>
-          <p>
-            We use great design to hide complexity, making sure the software feels easy because
-            we've done the hard work under the hood.
-          </p>
-
-          <div className="stats-grid">
-            {STATS.map((stat) => (
-              <div className="stat" key={stat.label}>
-                <h4>
-                  <CountUp
-                    value={stat.value}
-                    decimals={stat.decimals}
-                    suffix={stat.suffix}
-                  />
-                </h4>
-                <p>{stat.label}</p>
-              </div>
-            ))}
-          </div>
-        </Reveal>
-
-        <Reveal className="about-visual" delay={0.12}>
-          <div className="about-frame">
-            <img src={adminMockup} alt="Nexa admin analytics dashboard" />
-          </div>
-        </Reveal>
-      </section>
-
-      {/* FAQ */}
-      <section id="faq" className="section faq">
-        <Reveal className="section-header">
-          <span className="eyebrow">FAQ</span>
-          <h2>Frequently asked questions</h2>
-          <p>Got questions? We've got answers.</p>
-        </Reveal>
-
-        <div className="faq-list">
-          {FAQS.map((faq, idx) => (
-            <Reveal key={faq.question} delay={idx * 0.06}>
-              <FAQItem
-                question={faq.question}
-                answer={faq.answer}
-                isOpen={openFaq === idx}
-                onToggle={() => setOpenFaq(openFaq === idx ? null : idx)}
-              />
-            </Reveal>
-          ))}
-        </div>
-      </section>
-
-      {/* Contact / CTA */}
-      <section id="contact" className="section">
-        <Reveal className="cta-panel">
-          <div className="cta-glow" aria-hidden="true" />
-          <h2>Ready to cut through the noise?</h2>
-          <p>
-            Join thousands of readers who get exactly the news they care about — nothing more.
-          </p>
-          <div className="cta-actions">
-            <button className="btn btn-primary btn-lg" onClick={go}>
-              {user ? 'Go to Newsroom' : 'Get started free'}
-              <ArrowRight size={18} />
-            </button>
-            <a className="cta-mail" href="mailto:2005sehalarpit@gmail.com">
-              <Mail size={17} />
-              2005sehalarpit@gmail.com
-            </a>
-          </div>
-        </Reveal>
-      </section>
-
-      {/* Footer */}
-      <footer className="landing-footer">
-        <div className="footer-grid">
-          <div className="footer-brand">
-            <a href="/" className="landing-logo">
-              <img src="/Nexa.png" alt="" className="landing-logo-mark" />
-              <span>Nexa</span>
-            </a>
-            <p>Your personal AI-powered newsroom.</p>
-          </div>
-
-          <div className="footer-col">
-            <h4>Product</h4>
-            <ul>
-              <li><a href="#features">Features</a></li>
-              <li><a href="#">Pricing</a></li>
-              <li><a href="#">Security</a></li>
-            </ul>
-          </div>
-
-          <div className="footer-col">
-            <h4>Company</h4>
-            <ul>
-              <li><a href="#about">About us</a></li>
-              <li><a href="#">Careers</a></li>
-              <li><a href="#contact">Contact</a></li>
-            </ul>
-          </div>
-
-          <div className="footer-col">
-            <h4>Legal</h4>
-            <ul>
-              <li><a href="#">Privacy Policy</a></li>
-              <li><a href="#">Terms of Service</a></li>
-              <li><a href="#">Cookie Policy</a></li>
-            </ul>
-          </div>
-        </div>
-
-        <div className="footer-bottom">
-          <span>© {new Date().getFullYear()} Nexa Technology. All rights reserved.</span>
-        </div>
-      </footer>
+    <div className="pn" id="top">
+      <Navbar user={user} go={go} />
+      <main>
+        <Hero user={user} go={go} />
+        <Marquee items={TOPICS} />
+        <Stats />
+        <Services />
+        <Process />
+        <About />
+        <FAQ />
+        <CTA user={user} go={go} />
+      </main>
+      <Footer />
     </div>
   );
 };
